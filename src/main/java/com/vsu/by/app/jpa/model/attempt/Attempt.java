@@ -1,7 +1,7 @@
 package com.vsu.by.app.jpa.model.attempt;
 
-import com.vsu.by.app.pupils.Pupil;
-import com.vsu.by.app.task.Task;
+import com.vsu.by.app.people.pupils.Pupil;
+import com.vsu.by.app.education.task.Task;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -21,6 +21,6 @@ public class Attempt {
     private Task task;
     private Date start;
     private Date end;
-    private Object pupilAttempt; /**TODO*/
+    private Object pupilAttempt; /**TODO FOR DIPLOM*/
     private byte mark;
 }

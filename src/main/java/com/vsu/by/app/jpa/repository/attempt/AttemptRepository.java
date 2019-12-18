@@ -1,7 +1,7 @@
 package com.vsu.by.app.jpa.repository.attempt;
 
 import com.vsu.by.app.jpa.model.attempt.Attempt;
-import com.vsu.by.app.pupils.Pupil;
+import com.vsu.by.app.people.pupils.Pupil;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
