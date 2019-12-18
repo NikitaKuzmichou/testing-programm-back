@@ -1,6 +1,7 @@
 package com.vsu.by.app.people.groups;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,5 +37,10 @@ public class GroupService {
     @Transactional(readOnly = true)
     public List<Group> findAll() {
         return this.groupRepository.findAll();
+    }
+
+    @Transactional(readOnly = true)
+    public List<Group> findAll(Sort sort) {
+        return this.groupRepository.findAll(sort);
     }
 }

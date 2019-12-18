@@ -5,6 +5,8 @@ import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
+import java.util.List;
+
 @Mapper(injectionStrategy = InjectionStrategy.CONSTRUCTOR)
 public interface UserMapper {
 
@@ -17,4 +19,6 @@ public interface UserMapper {
     UserDetailDto toUserDetailDto(User user);
 
     UserInfoDto toUserInfoDto(User user);
+
+    List<UserInfoDto> toUserInfoDto(List<User> user);
 }
