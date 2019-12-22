@@ -1,4 +1,4 @@
-package com.vsu.by.app.jpa.model.attempt;
+package com.vsu.by.app.education.rule;
 
 import lombok.Data;
 

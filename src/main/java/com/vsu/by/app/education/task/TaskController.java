@@ -26,7 +26,7 @@ public class TaskController {
         return "All tasks";
     }
 
-    @GetMapping("{id}")
+    @GetMapping("/{id}")
     public String getTask(@PathVariable("id") Long id, Model model) {
         Optional<Task> task = this.taskService.getTask(id);
         if (task.isPresent()) {
@@ -39,7 +39,7 @@ public class TaskController {
         }
     }
 
-    @PostMapping/**TODO OR NOT????*/
+    @PostMapping("/add")/**TODO OR NOT????*/
     public String addTask(@RequestBody TaskAddEditDto taskAddEditDto,
                           Model model) {
         Task saved = this.taskService.saveTask(this.mapper.fromTaskAddEditDto(taskAddEditDto));

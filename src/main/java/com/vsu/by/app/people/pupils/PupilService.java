@@ -1,6 +1,6 @@
 package com.vsu.by.app.people.pupils;
 
-import com.vsu.by.app.jpa.repository.attempt.AttemptService;
+import com.vsu.by.app.education.attempt.AttemptService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

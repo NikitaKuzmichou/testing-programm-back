@@ -1,7 +1,8 @@
 package com.vsu.by.app.people.pupils;
 
+import com.vsu.by.app.education.attempt.dto.AttemptMapper;
 import com.vsu.by.app.people.groups.GroupService;
-import com.vsu.by.app.jpa.repository.attempt.AttemptService;
+import com.vsu.by.app.education.attempt.AttemptService;
 import com.vsu.by.app.people.pupils.dto.PupilMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,6 +27,8 @@ public class PupilsController {
     private PupilService pupilService;
     @Autowired
     private AttemptService attemptService;
+    @Autowired
+    private AttemptMapper attemptMapper;
 
     @GetMapping
     public String getPupils(Model model) {
@@ -39,9 +42,11 @@ public class PupilsController {
     public String getPupil(@PathVariable("id") Long id, Model model) {
         Optional<Pupil> pupil = this.pupilService.getPupil(id);
         if (pupil.isPresent()) {
-            model.addAttribute(
-                    "pupil",
-                    this.pupilMapper.toPupilDetailDto(pupil.get()));
+            model.addAttribute("attempts",
+                    this.attemptMapper.toAttemptInfoDto(
+                            this.attemptService.findAllByPupil(pupil.get())));
+            /**TODO possible additions:
+             * сортировка по предметам, по которым были написаны\проведены работы*/
             return "Pupil by id";
         } else {
             /**TODO EXCEPTION*/

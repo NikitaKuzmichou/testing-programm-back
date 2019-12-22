@@ -10,6 +10,7 @@ public class Subject {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "id_seq")
     @SequenceGenerator(name="id_seq", sequenceName = "subject_id", allocationSize = 1)
-    @Column(length = 32)
+    private Long id;
+    @Column(nullable = false, length = 32)
     private String name;
 }

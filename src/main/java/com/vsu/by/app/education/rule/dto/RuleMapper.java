@@ -1,6 +1,6 @@
 package com.vsu.by.app.education.rule.dto;
 
-import com.vsu.by.app.jpa.model.attempt.Rule;
+import com.vsu.by.app.education.rule.Rule;
 import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;

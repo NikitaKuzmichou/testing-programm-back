@@ -1,6 +1,6 @@
 package com.vsu.by.app.people.groups;
 
-import com.vsu.by.app.jpa.repository.attempt.AttemptService;
+import com.vsu.by.app.education.attempt.AttemptService;
 import com.vsu.by.app.people.groups.dto.GroupMapper;
 import com.vsu.by.app.people.pupils.PupilService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +35,7 @@ public class GroupsController {
         return "Groups list";
     }
 
-    @GetMapping("{id}")
+    @GetMapping("/{id}")
     public String getGroup(@PathVariable("id") Long id, Model model) {
         Optional<Group> group = this.groupService.getGroup(id);
         if (group.isPresent()) {

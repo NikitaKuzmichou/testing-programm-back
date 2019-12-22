@@ -1,4 +1,4 @@
-package com.vsu.by.app.jpa.model.attempt;
+package com.vsu.by.app.education.attempt;
 
 import com.vsu.by.app.people.pupils.Pupil;
 import com.vsu.by.app.education.task.Task;

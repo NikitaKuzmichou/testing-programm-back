@@ -2,6 +2,9 @@ package com.vsu.by.app.people.teacher;
 
 import com.vsu.by.app.people.groups.GroupService;
 import com.vsu.by.app.people.groups.dto.GroupMapper;
+import com.vsu.by.app.people.pupils.Pupil;
+import com.vsu.by.app.people.pupils.PupilService;
+import com.vsu.by.app.people.pupils.dto.PupilMapper;
 import com.vsu.by.app.people.user.User;
 import com.vsu.by.app.people.user.UserService;
 import com.vsu.by.app.people.user.dto.UserDetailDto;
@@ -24,6 +27,10 @@ public class TeacherController {
     @Autowired
     private UserMapper userMapper;
     @Autowired
+    private PupilService pupilService;
+    @Autowired
+    private PupilMapper pupilMapper;
+    @Autowired
     private GroupMapper groupMapper;
     @Autowired
     private GroupService groupService;
@@ -36,7 +43,7 @@ public class TeacherController {
         return "List teachers";
     }
 
-    @GetMapping("{id}")
+    @GetMapping("/{id}")
     public String getTeacher(@PathVariable("id") Long id, Model model) {
         Optional<User> teacher = this.userService.getUser(id);
         if (teacher.isPresent()) {
@@ -53,7 +60,21 @@ public class TeacherController {
         }
     }
 
-    @PostMapping
+    @GetMapping("/pupils/{id}")
+    public String getPupil(@PathVariable("id") Long id, Model model) {
+        Optional<Pupil> pupil = this.pupilService.getPupil(id);
+        if (pupil.isPresent()) {
+            model.addAttribute(
+                    "pupil",
+                    this.pupilMapper.toPupilDetailDto(pupil.get()));
+            return "Pupil by id";
+        } else {
+            /**TODO EXCEPTION*/
+            throw new NoSuchElementException("Такого ученика не существует");
+        }
+    }
+
+    @PostMapping("/add")
     public String addTeacher(@RequestBody UserDetailDto teacher) {
         User saved = this.userService.saveUser(this.userMapper.fromUserDetailDto(teacher));
         return saved.getId().toString();
