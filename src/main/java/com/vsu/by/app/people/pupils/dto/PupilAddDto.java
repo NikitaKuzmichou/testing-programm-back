@@ -7,7 +7,6 @@ import lombok.RequiredArgsConstructor;
 
 @Data
 @RequiredArgsConstructor
-public class PupilAddDto {
-    private UserDetailDto user;
+public class PupilAddDto extends UserDetailDto{
     private GroupDetailDto group;
 }

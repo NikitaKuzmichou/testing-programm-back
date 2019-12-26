@@ -14,7 +14,7 @@ public class Task {
     private Long id;
     @Embedded
     private TaskInfo info;
-    @OneToMany(cascade = {CascadeType.ALL})
+    @OneToOne(cascade = {CascadeType.ALL})
     private TaskType type;
     private Object taskText;
 }

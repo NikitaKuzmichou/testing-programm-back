@@ -6,14 +6,13 @@ import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
 import java.sql.Date;
+import java.util.List;
 
 @Data
 @RequiredArgsConstructor
 public class AttemptInfoDto {
     private Long id;
-    private PupilInfoDto pupilInfoDto;
     private TaskInfoDto taskInfoDto;
     private Date start;
     private Date end;
-    private byte mark;
 }

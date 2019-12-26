@@ -17,12 +17,12 @@ public class TaskController {
     @Autowired
     private TaskService taskService;
     @Autowired
-    private TaskMapper mapper;
+    private TaskMapper taskMapper;
 
     @GetMapping
     public String getTasks(Model model) {
         model.addAttribute("tasks",
-                this.mapper.toTaskInfoDto(this.taskService.findAll()));
+                this.taskMapper.toTaskInfoDto(this.taskService.findAll()));
         return "All tasks";
     }
 
@@ -31,7 +31,7 @@ public class TaskController {
         Optional<Task> task = this.taskService.getTask(id);
         if (task.isPresent()) {
             model.addAttribute("task",
-                    this.mapper.toTaskDetailDto(task.get()));
+                    this.taskMapper.toTaskDetailDto(task.get()));
             return "Task by id";
         } else {
             /**TODO EXCEPTION*/
@@ -42,8 +42,8 @@ public class TaskController {
     @PostMapping("/add")/**TODO OR NOT????*/
     public String addTask(@RequestBody TaskAddEditDto taskAddEditDto,
                           Model model) {
-        Task saved = this.taskService.saveTask(this.mapper.fromTaskAddEditDto(taskAddEditDto));
-        model.addAttribute("task", this.mapper.toTaskAddEditDto(saved));
+        Task saved = this.taskService.saveTask(this.taskMapper.fromTaskAddEditDto(taskAddEditDto));
+        model.addAttribute("task", this.taskMapper.toTaskAddEditDto(saved));
         return "Saved";
     }
 

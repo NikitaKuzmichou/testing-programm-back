@@ -1,20 +1,19 @@
 package com.vsu.by.app.education.attempt.dto;
 
+import com.vsu.by.app.education.pupilattempt.dto.PupilAttemptInfoDto;
 import com.vsu.by.app.education.task.dto.TaskDetailDto;
-import com.vsu.by.app.people.pupils.dto.PupilDetailDto;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
 import java.sql.Date;
+import java.util.List;
 
 @Data
 @RequiredArgsConstructor
 public class AttemptDetailDto {
     private Long id;
-    private PupilDetailDto pupil;
     private TaskDetailDto task;
+    private List<PupilAttemptInfoDto> pupilsAttempts;/**TODO????*/
     private Date start;
-    private Date end;
-    private String pupilAttempt; /**TODO FOR DIPLOM*/
-    private byte mark;
+    private Date end; /**TODO FOR DIPLOM*/
 }

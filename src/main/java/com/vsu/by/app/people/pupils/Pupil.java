@@ -13,9 +13,7 @@ import javax.persistence.OneToOne;
 @Data
 @RequiredArgsConstructor
 @Entity
-public class Pupil {
-    @OneToOne
-    private User user;
+public class Pupil extends User{
     @ManyToOne(optional = false)
     @JoinColumn(name = "id")
     private Group group;

@@ -1,5 +1,6 @@
 package com.vsu.by.app.education.attempt;
 
+import com.vsu.by.app.education.pupilattempt.PupilAttempt;
 import com.vsu.by.app.people.pupils.Pupil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
@@ -7,8 +8,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Date;
-import java.util.LinkedList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -19,13 +20,8 @@ public class AttemptService {
     private AttemptRepository attemptRepository;
 
     @Transactional(readOnly = true)
-    public Optional<Attempt> getByIdAndByPupil(final Long id) {
+    public Optional<Attempt> getById(final Long id) {
         return this.attemptRepository.findById(id);
-    }
-
-    @Transactional(readOnly = true)
-    public Optional<Attempt> getByIdAndByPupil(final Long id, final Pupil pupil) {
-        this.attemptRepository.findByIdAndByPupil(id, pupil);
     }
 
     @Transactional

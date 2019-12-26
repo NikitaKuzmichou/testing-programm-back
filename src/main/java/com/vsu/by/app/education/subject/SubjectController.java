@@ -1,12 +1,11 @@
 package com.vsu.by.app.education.subject;
 
+import com.vsu.by.app.education.pupilattempt.PupilAttemptService;
+import com.vsu.by.app.education.pupilattempt.dto.PupilAttemptMapper;
 import com.vsu.by.app.education.subject.dto.SubjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -19,6 +18,10 @@ public class SubjectController {
     private SubjectService subjectService;
     @Autowired
     private SubjectMapper subjectMapper;
+    @Autowired
+    private PupilAttemptService pupilAttemptService;
+    @Autowired
+    private PupilAttemptMapper pupilAttemptMapper;
 
     @GetMapping
     public String getSubjects(Model model) {
@@ -28,16 +31,27 @@ public class SubjectController {
     }
 
     @GetMapping("/{id}")
-    /**TODO. Need list attempts related with following subject
-     * ex: Russian: 1)diktant pravila pravopisania | 'mark' | 'date'*/
     public String getSubject(@PathVariable Long id, Model model) {
         Optional<Subject> subject = this.subjectService.getSubject(id);
         if (subject.isPresent()) {
-            model.addAttribute(this.subjectMapper.toSubjectDto(subject.get()));
+            model.addAttribute("pupilsAttempts",
+                    this.pupilAttemptMapper.toPupilAttemptInfoDto(this.pupilAttemptService.findAll()));
             return "Subject by id";
         } else {
             /**TODO EXCEPTION*/
             throw new NoSuchElementException("Такого предмета не существует");
         }
     }
+
+    /**TODO FOR DIPLOM
+    @GetMapping
+    public String addSubjectInfo() {
+
+    }
+
+    @PostMapping("/add")
+    public String addSubject(){
+
+    }
+     */
 }

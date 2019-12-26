@@ -11,8 +11,6 @@ import java.util.Optional;
 @Repository
 public interface AttemptRepository extends JpaRepository<Attempt, Long> {
 
-    Optional<Attempt> findByIdAndByPupil(final Long id, final Pupil pupil);
-
     List<Attempt> findAllByPupil(final Pupil pupil);
 
     void deleteAllByPupil(final Pupil pupil);

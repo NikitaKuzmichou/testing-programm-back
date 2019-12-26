@@ -57,7 +57,6 @@ public class PupilsController {
     /**TODO FOR ADMIN
     @PostMapping
     public ResponseEntity<String> addPupil(@RequestBody ) {
-
     }
     */
 
@@ -65,7 +64,6 @@ public class PupilsController {
     @PutMapping("/{id}")
     public ResponseEntity<String> updatePupil(@PathVariable("id") Long id,
                                               @RequestBody EditPupilDto editedPupil) {
-
     }
      */
 
