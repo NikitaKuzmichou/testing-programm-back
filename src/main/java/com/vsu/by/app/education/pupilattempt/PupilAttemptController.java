@@ -60,8 +60,10 @@ public class PupilAttemptController {
     public String savePupilAttempt(@PathVariable("pupilId") Long pupilId,
                                    @PathVariable("attemptId") Long attemptId,
                                    @RequestBody PupilAttemptAddEditDto pupilAttemptAddEditDto) {
-        this.pupilAttemptChecker.checkPupilAttempt(
-                this.pupilAttemptMapper.fromPupilAttemptAddEditDto(pupilAttemptAddEditDto));
+        PupilAttempt pupilAttempt =
+                this.pupilAttemptMapper.fromPupilAttemptAddEditDto(pupilAttemptAddEditDto);
+        this.pupilAttemptChecker.checkPupilAttempt(pupilAttempt);
+        this.pupilAttemptService.savePupilAttempt(pupilAttempt);
         return "Pupil attempt was saved";
     }
 }

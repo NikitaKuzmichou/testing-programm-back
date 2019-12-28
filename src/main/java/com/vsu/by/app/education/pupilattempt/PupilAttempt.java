@@ -25,4 +25,8 @@ public class PupilAttempt {
     private List<Mistake> mistakes;
     private String text; /**TODO FOR DIPLOM*/
     private byte mark;
+
+    public void addMistake(Mistake mistake) {
+        this.mistakes.add(mistake);
+    }
 }
