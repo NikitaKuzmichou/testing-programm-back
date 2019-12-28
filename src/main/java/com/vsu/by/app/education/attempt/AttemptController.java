@@ -2,13 +2,10 @@ package com.vsu.by.app.education.attempt;
 
 import com.vsu.by.app.education.attempt.dto.AttemptDetailDto;
 import com.vsu.by.app.education.attempt.dto.AttemptMapper;
-import com.vsu.by.app.education.pupilattempt.PupilAttemptService;
-import com.vsu.by.app.education.pupilattempt.dto.PupilAttemptMapper;
 import com.vsu.by.app.education.task.TaskService;
 import com.vsu.by.app.education.task.dto.TaskMapper;
 import com.vsu.by.app.people.groups.GroupService;
 import com.vsu.by.app.people.groups.dto.GroupMapper;
-import com.vsu.by.app.people.pupils.PupilService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.ui.Model;
@@ -21,12 +18,6 @@ import java.util.Optional;
 @RestController
 @RequestMapping("attempts")
 public class AttemptController {
-    @Autowired
-    private PupilService pupilService;
-    @Autowired
-    private PupilAttemptService pupilAttemptService;
-    @Autowired
-    private PupilAttemptMapper pupilAttemptMapper;
     @Autowired
     private TaskService taskService;
     @Autowired

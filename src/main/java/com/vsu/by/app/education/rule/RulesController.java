@@ -5,32 +5,36 @@ import com.vsu.by.app.education.rule.dto.RuleMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("rules/")
+@RequestMapping("rules")
 public class RulesController {
     @Autowired
     private RuleService ruleService;
     @Autowired
     private RuleMapper ruleMapper;
+    private static final String VIEW_NAME = "/education/rule/rules";
 
     @GetMapping
-    public String getRules(Model model) {
-        model.addAttribute("rules",
+    public ModelAndView getRules() {
+        ModelAndView modelAndView = new ModelAndView(this.VIEW_NAME);
+        modelAndView.addObject("rules",
                 this.ruleMapper.toRuleInfoDto(this.ruleService.findAll()));
-        return "Currently added rules";
+        return modelAndView;
     }
 
     @GetMapping("/{id}")
-    public String getRule(@PathVariable("id") Long id, Model model) {
+    public ModelAndView getRule(@PathVariable("id") Long id) {
         Optional<Rule> rule = this.ruleService.getRule(id);
         if (rule.isPresent()) {
-            model.addAttribute("rule",
+            ModelAndView modelAndView = new ModelAndView(this.VIEW_NAME);
+            modelAndView.addObject("rule",
                     this.ruleMapper.toRuleDetailDto(rule.get()));
-            return "Rule info";
+            return modelAndView;
         } else {
             /**TODO EXCEPTION*/
             throw new NoSuchElementException("Такого правила не существует");

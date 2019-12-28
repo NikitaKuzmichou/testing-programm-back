@@ -23,7 +23,7 @@ public class TaskService {
     }
 
     @Transactional(readOnly = true)
-    public Optional<Task> getTask(final String name) {
+    public Task getTask(final String name) {
         return this.taskRepository.findByName(name);
     }
 

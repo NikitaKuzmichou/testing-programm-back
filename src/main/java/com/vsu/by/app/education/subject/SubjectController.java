@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
-/**TODO*/
 @RestController
 @RequestMapping("subjects")
 public class SubjectController {

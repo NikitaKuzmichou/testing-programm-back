@@ -14,7 +14,7 @@ public class RuleService {
     private RuleRepository ruleRepository;
 
     @Transactional(readOnly = true)
-    public Optional<Rule> getRule(final String name) {
+    public Rule getRule(final String name) {
         return this.ruleRepository.findByName(name);
     }
 

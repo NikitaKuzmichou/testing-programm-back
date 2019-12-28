@@ -19,7 +19,7 @@ public class UserService {
     }
 
     @Transactional(readOnly = true)
-    public Optional<User> getUser(String login) {
+    public User getUser(String login) {
         return this.userRepository.findByLogin(login);
     }
 

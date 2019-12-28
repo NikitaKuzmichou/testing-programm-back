@@ -19,7 +19,7 @@ public class SubjectService {
     }
 
     @Transactional(readOnly = true)
-    public Optional<Subject> getSubject(final String name) {
+    public Subject getSubject(final String name) {
         return this.subjectRepository.findByName(name);
     }
 

@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 public class TaskTypeAddDto {
     private Long id;
     private String name;
-    private Object text;
-    private Object result;
+    /**TODO DIPLOM*/
+    private String text;
+    private String result;
 }

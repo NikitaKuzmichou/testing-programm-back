@@ -1,6 +1,5 @@
 package com.vsu.by.app.people.pupils;
 
-import com.vsu.by.app.education.attempt.AttemptService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,8 +13,6 @@ public class PupilService {
 
     @Autowired
     private PupilRepository pupilRepository;
-    @Autowired
-    private AttemptService attemptService;
 
     @Transactional(readOnly = true)
     public Optional<Pupil> getPupil(Long id) {
@@ -36,7 +33,6 @@ public class PupilService {
     public void deletePupil(Long id) {
         Optional<Pupil> pupil = this.getPupil(id);
         if (pupil.isPresent()) {
-            this.attemptService.deleteAllByPupil(pupil.get());
             this.pupilRepository.deleteById(id);
         } else {
             /**TODO EXCEPTION*/

@@ -1,7 +1,5 @@
 package com.vsu.by.app.role;
 
-import com.vsu.by.app.role.Role;
-import com.vsu.by.app.role.RoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,7 +19,7 @@ public class RoleService {
     }
 
     @Transactional(readOnly = true)
-    public Optional<Role> getRole(String name) {
+    public Role getRole(String name) {
         return this.roleRepository.findByName(name);
     }
 

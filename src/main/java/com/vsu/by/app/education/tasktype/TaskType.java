@@ -6,15 +6,16 @@ import javax.persistence.*;
 
 @Data
 @Entity
-/**TODO FOR DIPLOM*/
 public class TaskType {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "id_seq")
     @SequenceGenerator(name="id_seq", sequenceName = "task_type_id", allocationSize = 1)
     private Long id;
     private String name;
+    /**TODO FOR DIPLOM*/
     @Column(name = "task_xsd")
-    private Object text;
+    private String text;
+    /**TODO FOR DIPLOM*/
     @Column(name = "result_xsd")
-    private Object result;
+    private String result;
 }

@@ -12,9 +12,12 @@ public class Task {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "id_seq")
     @SequenceGenerator(name="id_seq", sequenceName = "task_id", allocationSize = 1)
     private Long id;
+    @Column(length = 64, nullable = false)
+    private String name;
     @Embedded
     private TaskInfo info;
     @OneToOne(cascade = {CascadeType.ALL})
     private TaskType type;
-    private Object taskText;
+    /**TODO FOR DIPLOM*/
+    private String taskText;
 }

@@ -1,11 +1,13 @@
 package com.vsu.by.app.education.pupilattempt;
 
 import com.vsu.by.app.education.attempt.Attempt;
+import com.vsu.by.app.education.mistake.Mistake;
 import com.vsu.by.app.people.pupils.Pupil;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Data
 @RequiredArgsConstructor
@@ -19,6 +21,8 @@ public class PupilAttempt {
     private Pupil pupil;
     @ManyToOne
     private Attempt attempt;
-    private Object text; /**TODO FOR DIPLOM*/
+    @OneToMany(mappedBy = "pupilAttempt", cascade = {CascadeType.ALL})
+    private List<Mistake> mistakes;
+    private String text; /**TODO FOR DIPLOM*/
     private byte mark;
 }

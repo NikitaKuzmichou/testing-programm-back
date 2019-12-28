@@ -4,9 +4,15 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.instrument.classloading.InstrumentationLoadTimeWeaver;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
+import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
+import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.web.servlet.ViewResolver;
+import org.springframework.web.servlet.view.InternalResourceViewResolver;
+import org.springframework.web.servlet.view.JstlView;
+import org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver;
 
 import java.util.Properties;
 
@@ -26,6 +32,7 @@ public class DevelopmentConfiguration {
                 "com.vsu.by.app.people.user",
                 "com.vsu.by.app.role",
                 "com.vsu.by.app.education.attempt",
+                "com.vsu.by.app.education.pupilattempt",
                 "com.vsu.by.app.education.mistake",
                 "com.vsu.by.app.education.rule",
                 "com.vsu.by.app.education.subject",
@@ -38,26 +45,21 @@ public class DevelopmentConfiguration {
     }
 
     @Bean
-    /**TODO*/
     public DriverManagerDataSource dataSource() {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
-        dataSource.setUrl("");
-        dataSource.setDriverClassName("");
-        dataSource.setUsername("");
-        dataSource.setPassword("");
+        dataSource.setUrl("jdbc:postgresql://localhost:5432/kursach_db");
+        dataSource.setDriverClassName("org.postgresql.Driver");
+        dataSource.setUsername("postgres");
+        dataSource.setPassword("admin");
         dataSource.setConnectionProperties(this.getConnectionProperties());
         return dataSource;
     }
 
-    /**TODO*/
     private Properties getConnectionProperties() {
         Properties properties = new Properties();
         properties.setProperty("spring.datasource.hikari.connectionTimeout", "1740");
         properties.setProperty("spring.jpa.properties.hibernate.dialect",
                 "org.hibernate.dialect.PostgreSQLDialect");
-        properties.setProperty("spring.h2.console.enabled", "");
-        properties.setProperty("spring.h2.console.path", "");
-        properties.setProperty("spring.h2.console.settings.web-allow-others", "");
         return properties;
     }
 

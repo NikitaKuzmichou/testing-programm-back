@@ -4,6 +4,7 @@ import com.vsu.by.app.education.pupilattempt.dto.PupilAttemptAddEditDto;
 import com.vsu.by.app.education.pupilattempt.dto.PupilAttemptMapper;
 import com.vsu.by.app.people.pupils.Pupil;
 import com.vsu.by.app.people.pupils.PupilService;
+import com.vsu.by.app.service.PupilAttemptChecker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -15,15 +16,16 @@ import java.util.Optional;
 @RestController
 @RequestMapping("attempt")
 public class PupilAttemptController {
-
     @Autowired
     private PupilService pupilService;
     @Autowired
     private PupilAttemptService pupilAttemptService;
     @Autowired
     private PupilAttemptMapper pupilAttemptMapper;
+    @Autowired
+    private PupilAttemptChecker pupilAttemptChecker;
 
-    @GetMapping("/{pupilId}/{attemptId}}")
+    @GetMapping("/{pupilId}/{attemptId}")
     public String getPupilAttempt(@PathVariable("pupilId") Long pupilId,
                                   @PathVariable("attemptId") Long attemptId,
                                   Model model) {
@@ -44,7 +46,7 @@ public class PupilAttemptController {
         }
     }
 
-    @PostMapping("/{pupilId}/{attemptId}}")
+    @PostMapping("/{pupilId}/{attemptId}")
     public String updatePupilAttempt(@PathVariable("pupilId") Long pupilId,
                                      @PathVariable("attemptId") Long attemptId,
                                      @RequestBody PupilAttemptAddEditDto pupilAttemptAddEditDto) {
@@ -53,4 +55,13 @@ public class PupilAttemptController {
         return "Pupil attempt was updated";
     }
 
+    /**TODO POSSIBLE OR EVERYTHING OK*/
+    @PostMapping("/save/{pupilId}/{attemptId}")
+    public String savePupilAttempt(@PathVariable("pupilId") Long pupilId,
+                                   @PathVariable("attemptId") Long attemptId,
+                                   @RequestBody PupilAttemptAddEditDto pupilAttemptAddEditDto) {
+        this.pupilAttemptChecker.checkPupilAttempt(
+                this.pupilAttemptMapper.fromPupilAttemptAddEditDto(pupilAttemptAddEditDto));
+        return "Pupil attempt was saved";
+    }
 }

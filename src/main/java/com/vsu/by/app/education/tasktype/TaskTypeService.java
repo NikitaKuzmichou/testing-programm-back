@@ -19,7 +19,7 @@ public class TaskTypeService {
     }
 
     @Transactional(readOnly = true)
-    public Optional<TaskType> getTaskType(String name) {
+    public TaskType getTaskType(String name) {
         return this.taskTypeRepository.findByName(name);
     }
 
