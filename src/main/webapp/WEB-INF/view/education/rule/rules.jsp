@@ -9,21 +9,24 @@
     <title>Добавленные правила</title>
 </head>
 <body>
-<div class="container">
-    <div class="row">
-        <div class="col-auto bg-secondary">
-            <p class="h3">Список добавленных правил</p>
-        </div>
-    </div>
+<div class="container-lg bg-light">
+    <label class="row col-auto bg-light">
+        <p class="h3">Список добавленных правил</p>
+    </label>
 
     <table class="table table-borderless">
-        <thead class="bg-secondary">
-          <th scope="col">Название</th>
+        <thead class="bg-light">
+        <tr>
+            <th class="bg-info text-white tex" scope="col">Название</th>
+        </tr>
         </thead>
         <tbody>
           <c:forEach items="${rules}" var="rule">
               <tr>
-                  <a <c:redirect url="/rules/${rule.id}"/>>${rule.name}</a>
+                  <th scope="row">
+                      <a class="btn btn-outline-primary"
+                              <c:redirect url="/rules/${rule.id}"/>>${rule.name}</a>
+                  </th>
               </tr>
           </c:forEach>
         </tbody>

@@ -9,7 +9,15 @@
     <title>${rule.name}</title>
 </head>
 <body>
-
+<div class="container">
+    <div class="card bg-light" style="width: available">
+        <div class="card-body">
+            <h4 class="card-header text-white bg-primary">${rule.name}</h4>
+            <p class="card-text">${rule.description}</p>
+            <p class="card-footer text-white bg-info">${rule.note}</p>
+        </div>
+    </div>
+</div>
 
 <script src="<c:url value="/js/bootstrap.min.js"/>"></script>
 </body>
