@@ -17,7 +17,7 @@
     <table class="table table-borderless">
         <thead class="bg-light">
         <tr>
-            <th class="bg-info text-white tex" scope="col">Название</th>
+            <th class="bg-info text-white" scope="col">Название</th>
         </tr>
         </thead>
         <tbody>

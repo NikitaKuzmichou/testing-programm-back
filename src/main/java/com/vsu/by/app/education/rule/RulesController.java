@@ -1,12 +1,16 @@
 package com.vsu.by.app.education.rule;
 
 import com.vsu.by.app.education.rule.dto.RuleDetailDto;
+import com.vsu.by.app.education.rule.dto.RuleInfoDto;
 import com.vsu.by.app.education.rule.dto.RuleMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
@@ -17,45 +21,42 @@ public class RulesController {
     private RuleService ruleService;
     @Autowired
     private RuleMapper ruleMapper;
-    private static final String VIEW_NAME = "/education/rule/rules";
 
     @GetMapping
-    public ModelAndView getRules() {
-        ModelAndView modelAndView = new ModelAndView(this.VIEW_NAME);
-        modelAndView.addObject("rules",
-                this.ruleMapper.toRuleInfoDto(this.ruleService.findAll()));
-        return modelAndView;
+    public ResponseEntity<List<RuleInfoDto>> getRules() {
+        return new ResponseEntity<>(
+                this.ruleMapper.toRuleInfoDto(this.ruleService.findAll()),
+                HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ModelAndView getRule(@PathVariable("id") Long id) {
+    public ResponseEntity<RuleDetailDto> getRule(@PathVariable("id") Long id) {
         Optional<Rule> rule = this.ruleService.getRule(id);
         if (rule.isPresent()) {
-            ModelAndView modelAndView = new ModelAndView(this.VIEW_NAME);
-            modelAndView.addObject("rule",
-                    this.ruleMapper.toRuleDetailDto(rule.get()));
-            return modelAndView;
+            return new ResponseEntity<>(
+                    this.ruleMapper.toRuleDetailDto(rule.get()),
+                    HttpStatus.OK);
         } else {
             /**TODO EXCEPTION*/
             throw new NoSuchElementException("Такого правила не существует");
         }
     }
 
-    @PostMapping("/add/")
-    public String addRule(@RequestBody RuleDetailDto ruleDetailDto) {
+    @PostMapping
+    public ResponseEntity<String> addRule(@RequestBody RuleDetailDto ruleDetailDto) {
         this.ruleService.saveRule(this.ruleMapper.fromRuleDetailDto(ruleDetailDto));
-        return "Saved";
+        return new ResponseEntity<>("Saved", HttpStatus.ACCEPTED);
     }
 
-    @PostMapping("/update/")
-    public String updateRule(@RequestBody RuleDetailDto ruleDetailDto) {
+    @PutMapping
+    public ResponseEntity<String> updateRule(@RequestBody RuleDetailDto ruleDetailDto) {
         this.ruleService.saveRule(this.ruleMapper.fromRuleDetailDto(ruleDetailDto));
-        return "Updated";
+        return new ResponseEntity<>("Updated", HttpStatus.ACCEPTED);
     }
 
-    @GetMapping("/delete/{id}")
-    public String deleteRule(@PathVariable("id") Long id) {
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteRule(@PathVariable("id") Long id) {
         this.ruleService.deleteRule(id);
-        return "Deleted";
+        return new ResponseEntity<>("Deleted", HttpStatus.ACCEPTED);
     }
 }

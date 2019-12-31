@@ -1,0 +1,16 @@
+<form (ngSubmit)="onSubmit()">
+  <div class="container-lg form-group">
+    <div class="row bg-light">
+      <div class="col bg-info text-white">
+        {{pupilAttempt.attempt.task.name}}
+      </div>
+      <div class="row">
+        <label for="textArea" class="bg-secondary text-white text-center">Поле ввода</label>
+        <textarea class="form-control" id="textArea" (change)="updatePupilText($event.target.value)"></textarea>
+      </div>
+    </div>
+    <div class="row">
+      <button class="btn btn-outline-primary">Завершить работу</button>
+    </div>
+  </div>
+</form>

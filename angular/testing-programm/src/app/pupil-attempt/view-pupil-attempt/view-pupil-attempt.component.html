@@ -1,0 +1,29 @@
+<div class="container">
+  <div class="row text-white text-center bg-info">
+    <div class="col">
+      {{pupilAttempt.pupil.name}}
+    </div>
+    <div class="col">
+      {{pupilAttempt.pupil.surname}}
+    </div>
+    <div class="col">
+      Факультет: {{pupilAttempt.pupil.group.faculty}}
+    </div>
+    <div class="col">
+      Группа: {{pupilAttempt.pupil.group}}
+    </div>
+    <div class="col">
+    </div>
+    <div>
+      <div class="card-body">
+        <p class="card-text">
+          <span *ngFor="let mistake of mistakes">
+            {{getTextWithoutMistakes(mistake.colNo)}}
+            <span class="bg-danger text-white">{{getMistakeSymbol(mistake.colNo)}}</span>
+          </span>
+        </p>
+        <p class="card-footer">Количество ошибок: {{mistakes.length}}</p>
+      </div>
+    </div>
+  </div>
+</div>

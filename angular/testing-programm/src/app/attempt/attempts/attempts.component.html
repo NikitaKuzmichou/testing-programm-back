@@ -1,0 +1,35 @@
+<div class="container-lg">
+  <label class="row col-auto bg-light">
+      <p class="h3">Список добавленных правил</p>
+  </label>
+  <table class="table table-borderless table-striped">
+    <thead class="bg-secondary">
+      <tr class="text-white">
+        <th scope="col">Предмет</th>
+        <th scope="col">Тип работы</th>
+        <th scope="col">Название работы</th>
+        <th scope="col">Дата начала</th>
+        <th scope="col">Дата окончания</th>
+      </tr>
+    </thead>
+    <tbody>
+      <ng-container *ngFor="let attempt of attempts">
+        <tr class="bg-light">
+          <td>{{attempt.task.subject.name}}</td>
+          <td>{{attempt.task.taskType.name}}</td>
+          <td><a routerLink="attempts/{{attempt.id}}" class="btn btn-outline-primary">{{attempt.task.name}}</a></td>
+          <td>{{attempt.start | date:'dd/MM/yyyy'}}</td>
+          <span *ngIf="isTimeOut(attempt); then timeOut else timeNotOut">
+            <ng-template #timeOut>
+              <td class="bg-danger">{{attempt.end | date:'dd/MM/yyyy'}}</td>
+            </ng-template>
+            <ng-template #timeNotOut>
+              <td class="bg-success">{{attempt.end | date:'dd/MM/yyyy'}}</td>
+            </ng-template>
+          </span>
+        </tr>
+      </ng-container>
+    </tbody>
+  </table>
+
+</div>

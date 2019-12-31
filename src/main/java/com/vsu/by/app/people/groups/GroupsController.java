@@ -1,16 +1,20 @@
 package com.vsu.by.app.people.groups;
 
 import com.vsu.by.app.education.attempt.AttemptService;
+import com.vsu.by.app.people.groups.dto.GroupDetailDto;
+import com.vsu.by.app.people.groups.dto.GroupInfoDto;
 import com.vsu.by.app.people.groups.dto.GroupMapper;
 import com.vsu.by.app.people.pupils.PupilService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
@@ -28,21 +32,19 @@ public class GroupsController {
     private AttemptService attemptService;
 
     @GetMapping
-    public String getGroups(Model model) {
-        model.addAttribute(
-                "groups",
-                this.groupMapper.toGroupInfoDto(this.groupService.findAll()));
-        return "Groups list";
+    public ResponseEntity<List<GroupInfoDto>> getGroups() {
+        return new ResponseEntity<>(
+                this.groupMapper.toGroupInfoDto(this.groupService.findAll()),
+                HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public String getGroup(@PathVariable("id") Long id, Model model) {
+    public ResponseEntity<GroupDetailDto> getGroup(@PathVariable("id") Long id) {
         Optional<Group> group = this.groupService.getGroup(id);
         if (group.isPresent()) {
-            model.addAttribute(
-                    "group",
-                    this.groupMapper.toGroupDetailDto(group.get()));
-            return "Group by id";
+            return new ResponseEntity<>(
+                    this.groupMapper.toGroupDetailDto(group.get()),
+                    HttpStatus.OK);
         } else {
             /**TODO EXCEPTION*/
             throw new NoSuchElementException("Такой группы не существует");

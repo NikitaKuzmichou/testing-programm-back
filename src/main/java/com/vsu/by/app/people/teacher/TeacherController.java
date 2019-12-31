@@ -1,26 +1,32 @@
 package com.vsu.by.app.people.teacher;
 
 import com.vsu.by.app.people.groups.GroupService;
+import com.vsu.by.app.people.groups.dto.GroupInfoDto;
 import com.vsu.by.app.people.groups.dto.GroupMapper;
 import com.vsu.by.app.people.pupils.Pupil;
 import com.vsu.by.app.people.pupils.PupilService;
+import com.vsu.by.app.people.pupils.dto.PupilDetailDto;
 import com.vsu.by.app.people.pupils.dto.PupilMapper;
 import com.vsu.by.app.people.user.User;
 import com.vsu.by.app.people.user.UserService;
 import com.vsu.by.app.people.user.dto.UserDetailDto;
+import com.vsu.by.app.people.user.dto.UserInfoDto;
 import com.vsu.by.app.people.user.dto.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @RestController
 @RequestMapping("teachers")
 @Transactional
+/**TODO swithc userService... to TeacherService*/
 public class TeacherController {
     @Autowired
     private UserService userService;
@@ -36,24 +42,23 @@ public class TeacherController {
     private GroupService groupService;
 
     @GetMapping
-    public String getTeachers(Model model) {
-        model.addAttribute(
-                "teachers",
-                this.userMapper.toUserInfoDto(this.userService.findAll()));
-        return "List teachers";
+    public ResponseEntity<List<UserInfoDto>> getTeachers() {
+        return new ResponseEntity<>(
+                this.userMapper.toUserInfoDto(this.userService.findAll()),
+                HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public String getTeacher(@PathVariable("id") Long id, Model model) {
+    /**MULTIPLE REQUESTS. ALSE RETURN INFO ABOUT TEACHER*/
+    public ResponseEntity<List<GroupInfoDto>> getTeacher(@PathVariable("id") Long id) {
         Optional<User> teacher = this.userService.getUser(id);
         if (teacher.isPresent()) {
-            model.addAttribute("groups",
+            return new ResponseEntity<>(
                     this.groupMapper.toGroupInfoDto(
                             this.groupService.findAll(
-                                    Sort.by(Sort.Direction.ASC,"faculty"))));
-            model.addAttribute("teacher",
-                    this.userMapper.toUserInfoDto(teacher.get()));
-            return "Teacher by id";
+                                    Sort.by(Sort.Direction.ASC,"faculty"))),
+                    HttpStatus.OK
+            );
         } else {
             /**TODO EXCEPTION*/
             throw new NoSuchElementException("Такого учителя не существует");
@@ -61,28 +66,27 @@ public class TeacherController {
     }
 
     @GetMapping("/pupils/{id}")
-    public String getPupil(@PathVariable("id") Long id, Model model) {
+    public ResponseEntity<PupilDetailDto> getPupil(@PathVariable("id") Long id) {
         Optional<Pupil> pupil = this.pupilService.getPupil(id);
         if (pupil.isPresent()) {
-            model.addAttribute(
-                    "pupil",
-                    this.pupilMapper.toPupilDetailDto(pupil.get()));
-            return "Pupil by id";
+            return new ResponseEntity<>(
+                    this.pupilMapper.toPupilDetailDto(pupil.get()),
+                    HttpStatus.OK);
         } else {
             /**TODO EXCEPTION*/
             throw new NoSuchElementException("Такого ученика не существует");
         }
     }
 
-    @PostMapping("/add")
-    public String addTeacher(@RequestBody UserDetailDto teacher) {
+    @PostMapping
+    public ResponseEntity<Long> addTeacher(@RequestBody UserDetailDto teacher) {
         User saved = this.userService.saveUser(this.userMapper.fromUserDetailDto(teacher));
-        return saved.getId().toString();
+        return new ResponseEntity<>(saved.getId(), HttpStatus.ACCEPTED);
     }
 
-    @GetMapping("/delete/{id}")
-    public String deleteTeacher(@PathVariable Long id) {
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity deleteTeacher(@PathVariable Long id) {
         this.userService.deleteUser(id);
-        return "redirect:/teachers";
+        return new ResponseEntity<>("redirect:/teachers", HttpStatus.ACCEPTED);
     }
 }

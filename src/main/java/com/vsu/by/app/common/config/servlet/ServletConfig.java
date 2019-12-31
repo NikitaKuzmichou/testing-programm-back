@@ -22,7 +22,7 @@ public class ServletConfig implements WebMvcConfigurer {
                 .addResourceLocations("/resources/");
     }
 
-    @Bean
+    /**TODO????@Bean
     public InternalResourceViewResolver setupViewResolver() {
         InternalResourceViewResolver resolver = new InternalResourceViewResolver();
         resolver.setPrefix("WEB-INF/view");
@@ -30,14 +30,14 @@ public class ServletConfig implements WebMvcConfigurer {
         resolver.setContentType("text/html; charset-UTF-8");
         resolver.setViewClass(JstlView.class);
         return resolver;
-    }
+    }*/
 
-    /**@Override
+    @Override
     public void addCorsMappings(CorsRegistry registry){
         registry.addMapping("/**")
                 .allowedMethods("GET", "POST", "PUT", "DELETE")
                 .maxAge(3600);
-    }*/
+    }
 
     @Override
     public void addViewControllers(ViewControllerRegistry registry){

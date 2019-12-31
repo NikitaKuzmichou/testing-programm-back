@@ -8,7 +8,7 @@ import javax.persistence.*;
 
 @Data
 @Entity
-@Table(name = "mistake")
+@Table(name = "Mistake")
 public class Mistake {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "id_seq")
@@ -18,8 +18,6 @@ public class Mistake {
     private PupilAttempt pupilAttempt;
     @OneToOne
     private Rule rule;
-    @Column(name = "row_no")
     private int rowNo;
-    @Column(name = "col_no")
     private int colNo;
 }

@@ -24,7 +24,7 @@ public class PupilAttemptChecker {
         int pLength = pupilSolution.length();
         int maxLength = aLength - pLength > 0 ? aLength : pLength;
         for (int i = 0; i < maxLength; ++i) {
-            if (Objects.equals(attemptTask.charAt(i), pupilSolution.charAt(i))) {
+            if (!Objects.equals(attemptTask.charAt(i), pupilSolution.charAt(i))) {
                 pupilAttempt.addMistake(
                         this.mistakeGenerator.getMistake(pupilAttempt, i, 0));
             }

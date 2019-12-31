@@ -1,19 +1,22 @@
 package com.vsu.by.app.education.attempt;
 
 import com.vsu.by.app.education.attempt.dto.AttemptDetailDto;
+import com.vsu.by.app.education.attempt.dto.AttemptInfoDto;
 import com.vsu.by.app.education.attempt.dto.AttemptMapper;
 import com.vsu.by.app.education.task.TaskService;
+import com.vsu.by.app.education.task.dto.TaskInfoDto;
 import com.vsu.by.app.education.task.dto.TaskMapper;
 import com.vsu.by.app.people.groups.GroupService;
+import com.vsu.by.app.people.groups.dto.GroupInfoDto;
 import com.vsu.by.app.people.groups.dto.GroupMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
+import java.util.*;
 
 @RestController
 @RequestMapping("attempts")
@@ -32,20 +35,20 @@ public class AttemptController {
     private AttemptMapper attemptMapper;
 
     @GetMapping
-    public String getAttempts(Model model) {
-        List<Attempt> sortedAttempts = this.attemptService.findAll(Sort.by("pupil"));
-        model.addAttribute("attempts",
-                this.attemptMapper.toAttemptInfoDto(sortedAttempts));
-        return "Attempts list";
+    public ResponseEntity<List<AttemptInfoDto>> getAttempts() {
+        List<Attempt> attempts = this.attemptService.findAll();
+        return new ResponseEntity<>(
+                this.attemptMapper.toAttemptInfoDto(attempts),
+                HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public String getAttempt(@PathVariable("id") Long id, Model model) {
+    public ResponseEntity<AttemptDetailDto> getAttempt(@PathVariable("id") Long id, Model model) {
         Optional<Attempt> attempt = this.attemptService.getById(id);
         if (attempt.isPresent()) {
-            model.addAttribute("attempt",
-                    this.attemptMapper.toAttemptDetailDto(attempt.get()));
-            return "Attempt detail";
+            return new ResponseEntity<>(
+                    this.attemptMapper.toAttemptDetailDto(attempt.get()),
+                    HttpStatus.OK);
         } else {
             /**TODO EXCEPTION*/
             throw new NoSuchElementException("Такой попытки не существует");
@@ -53,19 +56,20 @@ public class AttemptController {
     }
 
     @GetMapping("/start")
-    public String getStartAttempt(Model model) {
-        model.addAttribute("tasks",
-                this.taskMapper.toTaskInfoDto(this.taskService.findAll()));
-        model.addAttribute("groups",
-                this.groupMapper.toGroupInfoDto(this.groupService.findAll()));
-        return "Attempt init information";
+    /**TODO*/
+    public ResponseEntity<Map<List<TaskInfoDto>, List<GroupInfoDto>>> getStartAttempt() {
+        Map<List<TaskInfoDto>, List<GroupInfoDto>> resp = new LinkedHashMap<>();
+        List<TaskInfoDto> tasks = this.taskMapper.toTaskInfoDto(this.taskService.findAll());
+        List<GroupInfoDto> groups = this.groupMapper.toGroupInfoDto(this.groupService.findAll());
+        resp.put(tasks, groups);
+        return new ResponseEntity<>(resp, HttpStatus.OK);
     }
 
-    @PostMapping("/start")
-    public String startAttempt(@RequestBody AttemptDetailDto attemptDetailDto) {
+    @PostMapping
+    public ResponseEntity<String> startAttempt(@RequestBody AttemptDetailDto attemptDetailDto) {
         this.attemptService.saveAttempt(
                 this.attemptMapper.fromAttemptDetailDto(attemptDetailDto));
-        return "Attempt added";
+        return new ResponseEntity<>("Attempt added", HttpStatus.OK);
     }
 
     /**TODO DIPLOM

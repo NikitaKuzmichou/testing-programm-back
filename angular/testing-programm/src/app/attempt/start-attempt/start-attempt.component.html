@@ -1,0 +1,50 @@
+<form (ngSubmit)="onSubmit()">
+  <div class="container-lg bg-light">
+    <div class="row">
+      <div class="col-lg">
+        <div class="input-group-prepend">
+          <label class="input-group-text" for="inputSubjectSelect">Предмет</label>
+        </div>
+        <select class="custom-select" id="inputSubjectSelect" (change)="findTasksBySubject($event.target.value)">
+          <option>не выбран</option>
+          <option class="btn btn-outline-primary" *ngFor="let subject of subjects">{{subject.name}}</option>
+        </select>
+        <span *ngIf="getFoudTasks()">
+          <label class="input-group-text" for="inputTaskSelect">Задание</label>
+          <select class="custom-select" id="inputTaskSelect" [(ngModel)]="attempt.task">
+            <option class="btn btn-outline-primary" *ngFor="let task of getFoudTasks()">
+              <span class="bg-light">{{task.name}}</span>
+              <span class="bg-info text-white">{{task.taskType.name}}</span>
+            </option>
+          </select>
+        </span>
+      </div>
+      <div class="col-md">
+        <div class="input-group-prepend">
+          <label class="input-group-text" for="inputGroupSelect">Факультет</label>
+        </div>
+        <select class="custom-select" id="inputGroupSelect" (change)="findGroupsByFaculty($event.target.value)">
+          <option>не выбран</option>
+          <option *ngFor="let faculty of getFaculties()">{{faculty}}</option>
+        </select>
+        <span *ngIf="getFoundGroups()">
+          <label class="input-group-text" for="inputGroupNoSelect">Номер группы</label>
+          <select class="custom-select" id="inputGroupNoSelect" [(ngModel)]="attempt.group">
+            <option class="btn btn-outline-primary bg-light" *ngFor="let group of getFoundGroups()">
+              {{group.groupNo}}
+            </option>
+          </select>
+        </span>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col">
+        <label for="inputAttemptTime">Введите время, отводимое на работу. В минутах</label>
+        <input type="text" id="inputAttemptTime" (change)="setAttemptTime($event.target.value)">
+      </div>
+    </div>
+    <div class="row">
+      <button></button>
+    </div>
+  </div>
+</form>

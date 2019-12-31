@@ -17,7 +17,6 @@ public class Attempt {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "id_seq")
     @SequenceGenerator(name="id_seq", sequenceName = "attempt_id", allocationSize = 1)
-    @Column(name = "attempt_id")
     private Long id;
     @OneToMany(mappedBy = "attempt", cascade = {CascadeType.ALL})
     private List<PupilAttempt> pupilsAttempts;

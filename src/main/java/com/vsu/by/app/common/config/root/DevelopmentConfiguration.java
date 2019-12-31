@@ -47,7 +47,7 @@ public class DevelopmentConfiguration {
     @Bean
     public DriverManagerDataSource dataSource() {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
-        dataSource.setUrl("jdbc:postgresql://localhost:5432/kursach_db");
+        dataSource.setUrl("jdbc:postgresql://localhost:5432/ku");
         dataSource.setDriverClassName("org.postgresql.Driver");
         dataSource.setUsername("postgres");
         dataSource.setPassword("admin");
@@ -65,7 +65,7 @@ public class DevelopmentConfiguration {
 
     private Properties getJpaProperty() {
         Properties props = new Properties();
-        props.setProperty("spring.jpa.hibernate.ddl-auto", "none");
+        props.setProperty("spring.jpa.hibernate.ddl-auto", "create-drop");
         props.setProperty("hibernate.show_sql", "true");
         props.setProperty("hibernate.format_sql", "true");
         props.setProperty("logging.level.org.hibernate.SQL", "DEBUG");

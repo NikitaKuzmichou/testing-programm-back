@@ -1,12 +1,17 @@
 package com.vsu.by.app.education.subject;
 
 import com.vsu.by.app.education.pupilattempt.PupilAttemptService;
+import com.vsu.by.app.education.pupilattempt.dto.PupilAttemptInfoDto;
 import com.vsu.by.app.education.pupilattempt.dto.PupilAttemptMapper;
+import com.vsu.by.app.education.subject.dto.SubjectDto;
 import com.vsu.by.app.education.subject.dto.SubjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
@@ -23,19 +28,19 @@ public class SubjectController {
     private PupilAttemptMapper pupilAttemptMapper;
 
     @GetMapping
-    public String getSubjects(Model model) {
-        model.addAttribute("subjects",
-                this.subjectMapper.toSubjectDto(this.subjectService.findAll()));
-        return "Existing subjects";
+    public ResponseEntity<List<SubjectDto>> getSubjects() {
+        return new ResponseEntity<>(
+                this.subjectMapper.toSubjectDto(this.subjectService.findAll()),
+                HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public String getSubject(@PathVariable Long id, Model model) {
+    public ResponseEntity<List<PupilAttemptInfoDto>> getSubject(@PathVariable Long id) {
         Optional<Subject> subject = this.subjectService.getSubject(id);
         if (subject.isPresent()) {
-            model.addAttribute("pupilsAttempts",
-                    this.pupilAttemptMapper.toPupilAttemptInfoDto(this.pupilAttemptService.findAll()));
-            return "Subject by id";
+            return new ResponseEntity<>(
+                    this.pupilAttemptMapper.toPupilAttemptInfoDto(this.pupilAttemptService.findAll()),
+                    HttpStatus.OK);
         } else {
             /**TODO EXCEPTION*/
             throw new NoSuchElementException("Такого предмета не существует");
