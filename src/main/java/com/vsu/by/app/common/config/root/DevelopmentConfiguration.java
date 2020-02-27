@@ -1,24 +1,23 @@
 package com.vsu.by.app.common.config.root;
 
+import com.vsu.by.app.common.config.db.DbConfiguration;
+import com.vsu.by.app.common.config.db.H2DbConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.instrument.classloading.InstrumentationLoadTimeWeaver;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
-import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
-import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
-import org.springframework.web.servlet.ViewResolver;
-import org.springframework.web.servlet.view.InternalResourceViewResolver;
-import org.springframework.web.servlet.view.JstlView;
-import org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver;
 
 import java.util.Properties;
 
 @Configuration
 @EnableTransactionManagement
 public class DevelopmentConfiguration {
+    /**TODO Ну такое. В релиз не нужно в таком виде отправлять*/
+    private DbConfiguration dbConfiguration = new H2DbConfiguration();
+
     @Bean
     public LocalContainerEntityManagerFactoryBean entityManagerFactory(
             DriverManagerDataSource dataSource) {
@@ -45,29 +44,16 @@ public class DevelopmentConfiguration {
     }
 
     @Bean
-    public DriverManagerDataSource dataSource() {
-        DriverManagerDataSource dataSource = new DriverManagerDataSource();
-        dataSource.setUrl("jdbc:postgresql://localhost:5432/ku");
-        dataSource.setDriverClassName("org.postgresql.Driver");
-        dataSource.setUsername("postgres");
-        dataSource.setPassword("admin");
-        dataSource.setConnectionProperties(this.getConnectionProperties());
+    public DriverManagerDataSource dataSource(){
+        DriverManagerDataSource dataSource = this.dbConfiguration.dataSource();
         return dataSource;
     }
 
-    private Properties getConnectionProperties() {
-        Properties properties = new Properties();
-        properties.setProperty("spring.datasource.hikari.connectionTimeout", "1740");
-        properties.setProperty("spring.jpa.properties.hibernate.dialect",
-                "org.hibernate.dialect.PostgreSQLDialect");
-        return properties;
-    }
-
-    private Properties getJpaProperty() {
+    private Properties getJpaProperty(){
         Properties props = new Properties();
         props.setProperty("spring.jpa.hibernate.ddl-auto", "create-drop");
-        props.setProperty("hibernate.show_sql", "true");
-        props.setProperty("hibernate.format_sql", "true");
+        props.setProperty("spring.jpa.show-sql", "true");
+        props.setProperty("spring.jpa.format_sql", "true");
         props.setProperty("logging.level.org.hibernate.SQL", "DEBUG");
         props.setProperty("hibernate.use_sql_comments","true");
         return props;
