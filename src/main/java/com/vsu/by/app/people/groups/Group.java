@@ -8,17 +8,16 @@ import java.util.List;
 
 @Data
 @Entity
+@Table(name = "Groups")
 public class Group {
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "id_seq")
-    @SequenceGenerator(name="id_seq", sequenceName = "group_id", allocationSize = 1)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id private Long id;
     @Column(nullable = false, unique = true)
     private int groupNo;
     @Column(nullable = false)
     private String faculty;
     @Column(nullable = false)
     private int course;
-    @OneToMany(cascade = {CascadeType.REFRESH})
+    @OneToMany(mappedBy = "group", cascade = {CascadeType.MERGE})
     private List<Pupil> pupils;
 }

@@ -3,32 +3,27 @@ package com.vsu.by.app.education.attempt;
 import com.vsu.by.app.education.attempt.dto.AttemptDetailDto;
 import com.vsu.by.app.education.attempt.dto.AttemptInfoDto;
 import com.vsu.by.app.education.attempt.dto.AttemptMapper;
-import com.vsu.by.app.education.task.TaskService;
-import com.vsu.by.app.education.task.dto.TaskInfoDto;
-import com.vsu.by.app.education.task.dto.TaskMapper;
+import com.vsu.by.app.education.pupilattempt.PupilAttempt;
+import com.vsu.by.app.education.pupilattempt.PupilAttemptService;
+import com.vsu.by.app.people.groups.Group;
 import com.vsu.by.app.people.groups.GroupService;
-import com.vsu.by.app.people.groups.dto.GroupInfoDto;
-import com.vsu.by.app.people.groups.dto.GroupMapper;
+import com.vsu.by.app.people.pupils.Pupil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.*;
+import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("attempts")
 public class AttemptController {
     @Autowired
-    private TaskService taskService;
-    @Autowired
-    private TaskMapper taskMapper;
-    @Autowired
     private GroupService groupService;
     @Autowired
-    private GroupMapper groupMapper;
+    private PupilAttemptService pupilAttemptService;
     @Autowired
     private AttemptService attemptService;
     @Autowired
@@ -43,7 +38,7 @@ public class AttemptController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<AttemptDetailDto> getAttempt(@PathVariable("id") Long id, Model model) {
+    public ResponseEntity<AttemptDetailDto> getAttempt(@PathVariable("id") Long id) {
         Optional<Attempt> attempt = this.attemptService.getById(id);
         if (attempt.isPresent()) {
             return new ResponseEntity<>(
@@ -55,21 +50,28 @@ public class AttemptController {
         }
     }
 
-    @GetMapping("/start")
-    /**TODO*/
-    public ResponseEntity<Map<List<TaskInfoDto>, List<GroupInfoDto>>> getStartAttempt() {
-        Map<List<TaskInfoDto>, List<GroupInfoDto>> resp = new LinkedHashMap<>();
-        List<TaskInfoDto> tasks = this.taskMapper.toTaskInfoDto(this.taskService.findAll());
-        List<GroupInfoDto> groups = this.groupMapper.toGroupInfoDto(this.groupService.findAll());
-        resp.put(tasks, groups);
-        return new ResponseEntity<>(resp, HttpStatus.OK);
+    @PostMapping("{groupId}")
+    public ResponseEntity<String> startAttempt(@RequestBody AttemptDetailDto attemptDetailDto,
+                                               @PathVariable("groupId") Long groupId) {
+        Attempt attempt = this.attemptMapper.fromAttemptDetailDto(attemptDetailDto);
+        this.startPupilsAttempt(groupId, this.attemptService.saveAttempt(attempt));
+        return new ResponseEntity<>("", HttpStatus.OK);
     }
 
-    @PostMapping
-    public ResponseEntity<String> startAttempt(@RequestBody AttemptDetailDto attemptDetailDto) {
-        this.attemptService.saveAttempt(
-                this.attemptMapper.fromAttemptDetailDto(attemptDetailDto));
-        return new ResponseEntity<>("Attempt added", HttpStatus.OK);
+    /**TODO*/
+    private void startPupilsAttempt(Long groupId, Attempt attempt) {
+        Optional<Group> group = this.groupService.getGroup(groupId);
+        if (group.isPresent()) {
+            for (Pupil pupil : group.get().getPupils()) {
+                PupilAttempt pupilAttempt = new PupilAttempt();
+                pupilAttempt.setAttempt(attempt);
+                pupilAttempt.setPupil(pupil);
+                this.pupilAttemptService.savePupilAttempt(pupilAttempt);
+            }
+        } else {
+            /**TODO EXCEPTION*/
+            throw new NoSuchElementException("Такой группы не существует");
+        }
     }
 
     /**TODO DIPLOM
@@ -83,10 +85,5 @@ public class AttemptController {
             throw new NoSuchElementException("Такого задания не существует");
         }
     }
-
-     @GetMapping("/delete/{id}")
-     public String deleteAttempt() {
-
-     }
-     */
+    */
 }

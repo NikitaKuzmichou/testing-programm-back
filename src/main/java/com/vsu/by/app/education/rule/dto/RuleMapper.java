@@ -18,7 +18,7 @@ public interface RuleMapper {
 
     RuleDetailDto toRuleDetailDto(Rule rule);
 
-    RuleInfoDto toRuleInfoDto(RuleInfoDto ruleInfoDto);
+    RuleInfoDto toRuleInfoDto(Rule ruleInfoDto);
 
     List<RuleInfoDto> toRuleInfoDto(List<Rule> rules);
 }

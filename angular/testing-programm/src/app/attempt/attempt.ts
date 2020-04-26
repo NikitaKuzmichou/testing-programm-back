@@ -3,8 +3,8 @@ import { PupilAttempt } from "../pupil-attempt/pupilAttempt";
 
 export class Attempt {
     id: number;
-    pupilAttempts: PupilAttempt[] = new Array<PupilAttempt>();
+    pupilsAttempts: PupilAttempt[] = new Array<PupilAttempt>();
     task: Task;
-    start: Date;
-    end: Date;
+    start: number;
+    end: number;
 }

@@ -40,6 +40,11 @@ public class GroupService {
     }
 
     @Transactional(readOnly = true)
+    public List<Group> getAllByFacultyAndCourse(final String faculty, final Integer course) {
+        return this.groupRepository.getAllByFacultyAndCourse(faculty, course);
+    }
+
+    @Transactional(readOnly = true)
     public List<Group> findAll(Sort sort) {
         return this.groupRepository.findAll(sort);
     }

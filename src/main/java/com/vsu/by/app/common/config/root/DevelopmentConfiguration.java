@@ -32,6 +32,7 @@ public class DevelopmentConfiguration {
                 "com.vsu.by.app.role",
                 "com.vsu.by.app.education.attempt",
                 "com.vsu.by.app.education.pupilattempt",
+                "com.vsu.by.app.education.pupilmistake",
                 "com.vsu.by.app.education.mistake",
                 "com.vsu.by.app.education.rule",
                 "com.vsu.by.app.education.subject",
@@ -51,11 +52,16 @@ public class DevelopmentConfiguration {
 
     private Properties getJpaProperty(){
         Properties props = new Properties();
-        props.setProperty("spring.jpa.hibernate.ddl-auto", "create-drop");
-        props.setProperty("spring.jpa.show-sql", "true");
-        props.setProperty("spring.jpa.format_sql", "true");
+        //props.setProperty("hibernate.hbm2ddl.auto", "update");
+        props.setProperty("hibernate.show_sql", "true");
+        props.setProperty("hibernate.format_sql", "true");
         props.setProperty("logging.level.org.hibernate.SQL", "DEBUG");
         props.setProperty("hibernate.use_sql_comments","true");
+        //props.setProperty("spring.jpa.hibernate.ddl-auto", "create-drop");
+        //props.setProperty("spring.jpa.properties.hibernate.show-sql", "true");
+        //props.setProperty("spring.jpa.properties.hibernate.format_sql", "true");
+        //props.setProperty("spring.jpa.properties..hibernate.SQL", "debug");
+        //props.setProperty("spring.jpa.properties.hibernate.use_sql_comments","true");
         return props;
     }
 }

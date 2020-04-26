@@ -1,1 +1,80 @@
-<p>view-attempt works!</p>
+<div class="container-lg">
+  <div class="row bg-info h3 text-white">
+    <div class="col">{{attempt.task.subject.name}}</div>
+    <div class="col">{{attempt.task.type.name}}</div>
+  </div>
+  <div class="bg-primary text-right text-white">
+    <div class="h3 text-center">{{attempt.task.name}}</div>
+    <div class="row">
+      <div class="text-left">
+        <div class="col">
+          <button class="btn btn-success" (click)="update()">Обновить</button>
+        </div>
+      </div>
+      <div class="col">
+        <a class="btn btn-success" routerLink="/attempts-start/">Начать выполнение задания</a>        
+      </div>
+    </div>
+
+  </div>
+  <!--TODO PAGINATION
+      1)выбираем факультет, курс, группу
+      2) жмём кнопку показать
+      3) получаем результат на странице
+      4) результат в алфавитном порядке отсортирован по именам учащихся
+      5) сортировку по критериям на клиенте
+  -->
+  <table class="table table-borderless table-striped">
+    <thead class="bg-secondary">
+    <tr class="text-white">
+      <th scope="col">Факультет</th>
+      <th scope="col">Курс</th>
+      <th scope="col">Группа</th>
+      <th scope="col">Студент</th>
+      <th scope="col">Оценка</th>
+      <th scope="col">Дата начала</th>
+      <th scope="col">Дата окончания</th>
+      <th scope="col">Подробности</th>
+    </tr>
+    </thead>
+    <tbody>
+    <ng-container *ngFor="let pupilAttempt of attempt.pupilsAttempts">
+      <tr class="bg-light">
+        <td>{{pupilAttempt.pupil.group.faculty}}</td>
+        <td>{{pupilAttempt.pupil.group.course}}</td>
+        <td>{{pupilAttempt.pupil.group.groupNo}}</td>
+        <td>
+          <a routerLink="/pupils/{{pupilAttempt.pupil.id}}">
+            {{pupilAttempt.pupil.surname + " " + pupilAttempt.pupil.name}}
+          </a>
+        </td>
+        <td class="text-center">
+          <div class="bg-success" *ngIf="isGoodMark(pupilAttempt.mark)">
+            {{pupilAttempt.mark}}
+          </div>
+          <div class="bg-warning" *ngIf="isNormalMark(pupilAttempt.mark)">
+            {{pupilAttempt.mark}}
+          </div>
+          <div class="bg-danger" *ngIf="isBadMark(pupilAttempt.mark)">
+            {{pupilAttempt.mark}}
+          </div>
+        </td>
+        <td>{{attempt.start | date: 'dd.MM.yyyy HH:mm' }}</td>
+        <div *ngIf="isTimeOut(attempt); then timeOut else timeNotOut"></div>
+        <ng-template #timeOut>
+          <td class="bg-danger text-white">{{attempt.end | date: 'dd.MM.yyyy HH:mm' }}</td>
+        </ng-template>
+        <ng-template #timeNotOut>
+          <td class="bg-success">{{attempt.end | date: 'dd.MM.yyyy HH:mm' }}</td>
+        </ng-template>
+        <td>
+          <a class="btn btn-outline-primary"
+             routerLink="/pupils-attempts-view/{{pupilAttempt.pupil.id}}/{{attempt.id}}">
+            Подробности
+          </a>
+        </td>
+      </tr>
+    </ng-container>
+    </tbody>
+  </table>
+</div>

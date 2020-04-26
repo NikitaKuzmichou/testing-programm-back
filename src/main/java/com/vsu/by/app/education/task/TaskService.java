@@ -5,9 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class TaskService {
@@ -52,5 +50,17 @@ public class TaskService {
     @Transactional(readOnly = true)
     public List<Task> findAll() {
         return this.taskRepository.findAll();
+    }
+
+    @Transactional(readOnly = true)
+    public List<Task> findAllBySubjectAndTaskType(final Long subjectId, final Long taskTypeId) {
+        List<Task> tasks = new LinkedList<>();
+        for(Task task : this.findAll()) {
+            if (Objects.equals(task.getInfo().getSubject().getId(), subjectId) &&
+                    Objects.equals(task.getType().getId(), taskTypeId)) {
+                tasks.add(task);
+            }
+        }
+        return tasks;
     }
 }

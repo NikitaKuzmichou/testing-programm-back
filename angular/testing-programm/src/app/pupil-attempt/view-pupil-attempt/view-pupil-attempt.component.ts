@@ -1,10 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute }    from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 
 import { PupilAttempt } from '../pupilAttempt';
 import { PupilAttemptService } from '../pupilAttempt.service';
 import { ServerRequestUrls } from '../../ServerRequestUrls';
-import { Mistake } from '../../mistake/mistake';
 
 @Component({
   selector: 'app-view-pupil-attempt',
@@ -13,39 +12,43 @@ import { Mistake } from '../../mistake/mistake';
 })
 export class ViewPupilAttemptComponent implements OnInit {
   pupilAttempt: PupilAttempt;
-  pupilId: string;
-  attemptId: string;
-  mistakes: Mistake[];
 
   constructor(private pupilAttemptService: PupilAttemptService,
-              private route: ActivatedRoute,) {
-                console.log("hey");
-    this.pupilId = this.route.snapshot.paramMap.get("pupilId");
-    this.attemptId = this.route.snapshot.paramMap.get("attemptId");
+              private route: ActivatedRoute) {
     this.pupilAttemptService.setUrl(ServerRequestUrls.PUPIL_ATTEMPT);
-    this.pupilAttempt = this.requestPupilAttempt();
-    this.mistakes = this.pupilAttempt.mistakes;
    }
 
   ngOnInit() {
+    this.pupilAttempt = this.requestPupilAttempt();
+    console.log(this.pupilAttempt);
   }
 
-  hasErrors() {
-    return this.mistakes.length != 0;
+  update() {
+    this.pupilAttempt = this.requestPupilAttempt();
   }
 
-  getTextWithoutMistakes(mistake) {
-    if (mistake == 0) {
-      return this.pupilAttempt.text.substring(0, this.mistakes[mistake].colNo);
+  getListWords() {
+    if (this.pupilAttempt.text) {
+      return this.pupilAttempt.text.split(' ');
     }
-    return this.pupilAttempt.text.substring(this.mistakes[mistake - 1].colNo + 1, this.mistakes[mistake].colNo);
+    return null;
   }
 
-  getMistakeSymbol(mistake) {
-    return this.pupilAttempt.text[mistake];
+  setPupilMistakes($mistakes) {
+    this.pupilAttempt.mistakes = $mistakes;
+  }
+
+  recheck() {
+    this.pupilAttempt = this.requestRecheckPupilAttempt();
   }
 
   private requestPupilAttempt() {
-    return this.pupilAttemptService.getPupilAttempt(+this.pupilId, +this.attemptId);
+    return this.pupilAttemptService.getPupilAttempt(+this.route.snapshot.paramMap.get('pupilId'),
+                                                    +this.route.snapshot.paramMap.get('attemptId'));
+  }
+
+  private requestRecheckPupilAttempt() {
+    return this.pupilAttemptService.recheckPupilAttempt(+this.route.snapshot.paramMap.get('pupilId'),
+                                                        +this.route.snapshot.paramMap.get('attemptId'));
   }
 }

@@ -3,6 +3,8 @@ package com.vsu.by.app.people.groups.dto;
 import com.vsu.by.app.people.groups.Group;
 import com.vsu.by.app.people.pupils.Pupil;
 import com.vsu.by.app.people.pupils.dto.PupilInfoDto;
+import com.vsu.by.app.role.Role;
+import com.vsu.by.app.role.dto.RoleDto;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.Generated;
@@ -42,6 +44,7 @@ public class GroupMapperImpl implements GroupMapper {
         group.setId( groupInfoDto.getId() );
         group.setGroupNo( groupInfoDto.getGroupNo() );
         group.setFaculty( groupInfoDto.getFaculty() );
+        group.setCourse( groupInfoDto.getCourse() );
 
         return group;
     }
@@ -86,8 +89,9 @@ public class GroupMapperImpl implements GroupMapper {
         GroupInfoDto groupInfoDto = new GroupInfoDto();
 
         groupInfoDto.setId( group.getId() );
-        groupInfoDto.setGroupNo( group.getGroupNo() );
         groupInfoDto.setFaculty( group.getFaculty() );
+        groupInfoDto.setCourse( group.getCourse() );
+        groupInfoDto.setGroupNo( group.getGroupNo() );
 
         return groupInfoDto;
     }
@@ -120,6 +124,19 @@ public class GroupMapperImpl implements GroupMapper {
         return list;
     }
 
+    protected Role roleDtoToRole(RoleDto roleDto) {
+        if ( roleDto == null ) {
+            return null;
+        }
+
+        Role role = new Role();
+
+        role.setId( roleDto.getId() );
+        role.setName( roleDto.getName() );
+
+        return role;
+    }
+
     protected Pupil pupilInfoDtoToPupil(PupilInfoDto pupilInfoDto) {
         if ( pupilInfoDto == null ) {
             return null;
@@ -131,6 +148,9 @@ public class GroupMapperImpl implements GroupMapper {
         pupil.setName( pupilInfoDto.getName() );
         pupil.setSurname( pupilInfoDto.getSurname() );
         pupil.setPatronymic( pupilInfoDto.getPatronymic() );
+        pupil.setLogin( pupilInfoDto.getLogin() );
+        pupil.setRole( roleDtoToRole( pupilInfoDto.getRole() ) );
+        pupil.setGroup( fromGroupDetailDto( pupilInfoDto.getGroup() ) );
 
         return pupil;
     }
@@ -148,6 +168,19 @@ public class GroupMapperImpl implements GroupMapper {
         return list1;
     }
 
+    protected RoleDto roleToRoleDto(Role role) {
+        if ( role == null ) {
+            return null;
+        }
+
+        RoleDto roleDto = new RoleDto();
+
+        roleDto.setId( role.getId() );
+        roleDto.setName( role.getName() );
+
+        return roleDto;
+    }
+
     protected PupilInfoDto pupilToPupilInfoDto(Pupil pupil) {
         if ( pupil == null ) {
             return null;
@@ -156,9 +189,12 @@ public class GroupMapperImpl implements GroupMapper {
         PupilInfoDto pupilInfoDto = new PupilInfoDto();
 
         pupilInfoDto.setId( pupil.getId() );
+        pupilInfoDto.setLogin( pupil.getLogin() );
         pupilInfoDto.setName( pupil.getName() );
         pupilInfoDto.setSurname( pupil.getSurname() );
         pupilInfoDto.setPatronymic( pupil.getPatronymic() );
+        pupilInfoDto.setGroup( toGroupInfoDto( pupil.getGroup() ) );
+        pupilInfoDto.setRole( roleToRoleDto( pupil.getRole() ) );
 
         return pupilInfoDto;
     }

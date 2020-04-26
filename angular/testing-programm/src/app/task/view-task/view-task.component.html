@@ -1,1 +1,55 @@
-<p>view-task works!</p>
+<div class="container">
+  <table class="table table-borderless table-striped">
+    <thead class="bg-info text-white text-center">
+      <tr>
+        <th scope="col">Тип</th>
+        <th scope="col">Предмет</th>
+        <th scope="col">Задание</th>
+        <th scope="col">Добавил</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>{{task.type.name}}</td>
+        <td>{{task.subject.name}}</td>
+        <td>{{task.name}}</td>
+        <td>{{task.uploader.surname + ' ' + task.uploader.name}}</td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="col">
+    <div class="h4 text-center bg-info text-white">Описание</div>
+    <app-text-editor
+        [initialText]="task.description"
+        [disabled]="!isChangeDescr"
+        (outText)="updateDescription($event)"></app-text-editor>
+    <div class="text-right">
+      <span *ngIf="!isChangeDescr; then showDescriptionEdit else showDescriptionSave"></span>
+      <ng-template #showDescriptionEdit>
+        <button class="btn btn-outline-warning" (click)="editTaskDescription()">Редактировать</button>
+      </ng-template>
+      <ng-template #showDescriptionSave>
+        <button class="btn btn-outline-success" (click)="saveTaskDescription()">Сохранить</button>
+      </ng-template>
+    </div>
+  </div>
+  <div class="col bg-light">
+    <div class="h4 text-center bg-info text-white">Текст задания</div>
+    <app-text-editor
+        [initialText]="task.taskText"
+        [disabled]="!isChangeText"
+        (outText)="updateText($event)"></app-text-editor>
+    <div class="text-right">
+      <span *ngIf="!isChangeText; then showTextEdit else showTextSave"></span>
+      <ng-template #showTextEdit>
+        <button class="btn btn-outline-warning" (click)="editTaskText()">Редактировать</button>
+      </ng-template>
+      <ng-template #showTextSave>
+        <button class="btn btn-outline-success" (click)="saveTaskText()">Сохранить</button>
+      </ng-template>
+    </div>
+    <div class="text-left">
+      <a class="btn btn-outline-primary" routerLink="/tasks">Задания</a>
+    </div>
+  </div>
+</div>

@@ -4,13 +4,14 @@ import com.vsu.by.app.people.user.User;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
+import javax.persistence.*;
 
 @Data
 @RequiredArgsConstructor
 @Entity
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@PrimaryKeyJoinColumn(name = "id")
+/*@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorValue("2")
+ */
 public class Teacher extends User {
 }

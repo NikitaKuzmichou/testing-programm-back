@@ -1,0 +1,33 @@
+<!--Group selection-->
+<div class="container input-group-lg">
+  <div class="input-group-prepend">
+    <label class="input-group-text" for="inputFacultySelect">Факультет</label>
+  </div>
+  <select class="custom-select" id="inputFacultySelect" name="inputFaculty"
+          [(ngModel)]="selectedGroup.faculty" (change)="selectFaculty()">
+    <option disabled>Не выбран</option>
+    <option *ngFor="let faculty of faculties" [ngValue]="faculty">
+      {{faculty}}
+    </option>
+  </select>
+  <div class="input-group-prepend">
+    <label class="input-group-text" for="inputCourseSelect">Курс</label>
+  </div>
+  <select class="custom-select" id="inputCourseSelect" name="inputCourse"
+          [disabled]="isFacultySelected()" [(ngModel)]="selectedGroup.course" (change)="selectCourse()">
+    <option disabled>Не выбран</option>
+    <option *ngFor="let course of courses" [ngValue]="course">
+      {{course}}
+    </option>
+  </select>
+  <div class="input-group-prepend">
+    <label class="input-group-text" for="inputGroupSelect">Группа</label>
+  </div>
+  <select class="custom-select" id="inputGroupSelect" name="inputGroup"
+          [disabled]="isCourseSelected()" [(ngModel)]="selectedGroup.id" (change)="selectGroup()">
+    <option disabled>Не выбрана</option>
+    <option *ngFor="let group of groups" [ngValue]="group.id">
+      {{group.groupNo}}
+    </option>
+  </select>
+</div>

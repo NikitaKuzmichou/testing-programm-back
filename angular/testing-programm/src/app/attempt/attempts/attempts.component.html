@@ -1,35 +1,41 @@
 <div class="container-lg">
-  <label class="row col-auto bg-light">
-      <p class="h3">Список добавленных правил</p>
-  </label>
+  <div class="bg-light">
+    <div class="h3 text-center">Список проведённых работ</div>
+    <div class="row h2">
+      <button class="btn btn-outline-success" (click)="update()">Обновить</button>
+      <div class="col-sm text-right">
+        <a class="btn btn-outline-success" routerLink="/attempts-start">Начать новое задание</a>
+      </div>
+    </div>
+  </div>
   <table class="table table-borderless table-striped">
-    <thead class="bg-secondary">
+    <thead class="bg-secondary text-center">
       <tr class="text-white">
         <th scope="col">Предмет</th>
         <th scope="col">Тип работы</th>
-        <th scope="col">Название работы</th>
+        <th scope="col">Название задания</th>
         <th scope="col">Дата начала</th>
         <th scope="col">Дата окончания</th>
+        <th scope="col">Подробности</th>
       </tr>
     </thead>
-    <tbody>
+    <tbody class="bg-light">
       <ng-container *ngFor="let attempt of attempts">
-        <tr class="bg-light">
+        <tr>
           <td>{{attempt.task.subject.name}}</td>
-          <td>{{attempt.task.taskType.name}}</td>
-          <td><a routerLink="attempts/{{attempt.id}}" class="btn btn-outline-primary">{{attempt.task.name}}</a></td>
-          <td>{{attempt.start | date:'dd/MM/yyyy'}}</td>
-          <span *ngIf="isTimeOut(attempt); then timeOut else timeNotOut">
-            <ng-template #timeOut>
-              <td class="bg-danger">{{attempt.end | date:'dd/MM/yyyy'}}</td>
-            </ng-template>
-            <ng-template #timeNotOut>
-              <td class="bg-success">{{attempt.end | date:'dd/MM/yyyy'}}</td>
-            </ng-template>
-          </span>
+          <td>{{attempt.task.type.name}}</td>
+          <td><a routerLink="/tasks/{{attempt.task.id}}">{{attempt.task.name}}</a></td>
+          <td>{{attempt.start | date: 'dd.MM.yyyy HH:mm' }}</td>
+          <div *ngIf="isTimeOut(attempt); then timeOut else timeNotOut"></div>
+          <ng-template #timeOut>
+            <td class="bg-danger text-white">{{attempt.end | date: 'dd.MM.yyyy HH:mm' }}</td>
+          </ng-template>
+          <ng-template #timeNotOut>
+            <td class="bg-success">{{attempt.end | date: 'dd.MM.yyyy HH:mm' }}</td>
+          </ng-template>
+          <td><a routerLink="/attempts/{{attempt.id}}" class="btn btn-outline-primary">Подробности</a></td>
         </tr>
       </ng-container>
     </tbody>
   </table>
-
 </div>

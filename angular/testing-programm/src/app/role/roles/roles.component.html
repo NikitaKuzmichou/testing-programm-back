@@ -1,1 +1,24 @@
-<p>roles works!</p>
+<div class="container">
+  <table class="table table-borderless table-striped">
+    <thead class="bg-info text-white text-center">
+      <tr>
+        <th scope="col">Id</th>
+        <th scope="col">Название</th>
+        <th scope="col">Подробнее</th>
+      </tr>
+    </thead>
+    <tbody class="bg-light">
+      <ng-container *ngFor="let role of roles">
+        <tr>
+          <td>{{role.id}}</td>
+          <td>{{role.name}}</td>
+          <td> 
+            <a class="btn btn-outline-primary" routerLink="/roles/{{role.id}}">
+              Подробнее
+            </a>
+          </td>
+        </tr>
+      </ng-container>
+    </tbody>
+  </table>
+</div>

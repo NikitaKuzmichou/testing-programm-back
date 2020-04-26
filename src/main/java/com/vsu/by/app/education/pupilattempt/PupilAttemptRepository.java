@@ -10,4 +10,6 @@ import java.util.List;
 public interface PupilAttemptRepository extends JpaRepository<PupilAttempt, Long> {
 
     List<PupilAttempt> findAllByPupil(Pupil pupil);
+
+    List<PupilAttempt> findAllByPupilId(Long id);
 }

@@ -1,7 +1,7 @@
 package com.vsu.by.app.education.mistake;
 
-import com.vsu.by.app.education.pupilattempt.PupilAttempt;
 import com.vsu.by.app.education.rule.Rule;
+import com.vsu.by.app.education.task.Task;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -11,13 +11,12 @@ import javax.persistence.*;
 @Table(name = "Mistake")
 public class Mistake {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "id_seq")
-    @SequenceGenerator(name="id_seq", sequenceName = "pupil_mistake_id", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @ManyToOne
-    private PupilAttempt pupilAttempt;
-    @OneToOne
+    @OneToOne(cascade = {CascadeType.MERGE})
     private Rule rule;
-    private int rowNo;
-    private int colNo;
+    @OneToOne(cascade = {CascadeType.MERGE})
+    private Task task;
+    private int wordNo;
+    private int symbolNo;
 }

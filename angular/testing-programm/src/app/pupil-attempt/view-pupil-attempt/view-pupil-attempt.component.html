@@ -1,29 +1,30 @@
 <div class="container">
-  <div class="row text-white text-center bg-info">
-    <div class="col">
-      {{pupilAttempt.pupil.name}}
-    </div>
-    <div class="col">
-      {{pupilAttempt.pupil.surname}}
-    </div>
-    <div class="col">
-      Факультет: {{pupilAttempt.pupil.group.faculty}}
-    </div>
-    <div class="col">
-      Группа: {{pupilAttempt.pupil.group}}
-    </div>
-    <div class="col">
-    </div>
+  <div class="text-white bg-info h3 text-center">
     <div>
-      <div class="card-body">
-        <p class="card-text">
-          <span *ngFor="let mistake of mistakes">
-            {{getTextWithoutMistakes(mistake.colNo)}}
-            <span class="bg-danger text-white">{{getMistakeSymbol(mistake.colNo)}}</span>
-          </span>
-        </p>
-        <p class="card-footer">Количество ошибок: {{mistakes.length}}</p>
-      </div>
+      {{pupilAttempt.pupil.surname + ' ' + pupilAttempt.pupil.name}}
+    </div>
+    <div>Факультет: {{pupilAttempt.pupil.group.faculty}}</div>
+    <div>Группа: {{pupilAttempt.pupil.group.groupNo}}</div>
+  </div>
+  <div class="row h2">
+    <button class="btn btn-outline-success" (click)="update()">Обновить</button>
+  </div>
+  <div class="text-center h4">Текст задания</div>
+  <app-text-editor [initialText]="pupilAttempt.attempt.task.taskText"
+                   [disabled]="true"
+  ></app-text-editor>
+  <div class="text-center h4">Работа учащегося</div>
+  <app-pupil-text-editor [pupilText]="getListWords()"
+                         [allMistakes]="pupilAttempt.mistakes"
+                         [mark]="pupilAttempt.mark"
+                         (outMistakes)="setPupilMistakes($event)"
+  ></app-pupil-text-editor>
+  <div class="row">
+    <div class="col">
+      <a class="btn btn-outline-primary" routerLink="/pupils/{{pupilAttempt.pupil.id}}">Обратно к ученику</a>
+    </div>
+    <div class="col">
+      <button class="btn btn-outline-primary" (click)="recheck()">Перепроверить</button>
     </div>
   </div>
 </div>

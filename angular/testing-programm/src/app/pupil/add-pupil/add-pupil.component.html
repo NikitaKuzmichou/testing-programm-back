@@ -1,0 +1,40 @@
+<form class="container-lg" (ngSubmit)="onSave()">
+  <!--FIO-->
+  <div class="container input-group-lg">
+    <label class="input-group-text" for="inputPupilName">Введите имя учащегося</label>
+    <input class="form-control" type="text" id="inputPupilName"
+           (keypress)="setPupilName($event.target.value)"
+           (change)="setPupilName($event.target.value)"
+           (blur)="setPupilName($event.target.value)">
+    <label class="input-group-text" for="inputPupilSurname">Введите фамилию учащегося</label>
+    <input class="form-control" type="text" id="inputPupilSurname"
+           (keypress)="setPupilSurname($event.target.value)"
+           (change)="setPupilSurname($event.target.value)"
+           (blur)="setPupilSurname($event.target.value)">
+    <label class="input-group-text" for="inputPupilPatronymic">Введите отчество учащегося</label>
+    <input class="form-control" type="text" id="inputPupilPatronymic"
+           (keypress)="setPupilPatronymic($event.target.value)"
+           (change)="setPupilPatronymic($event.target.value)"
+           (blur)="setPupilPatronymic($event.target.value)">
+    <label class="input-group-text" for="inputPupilLogin">Введите логин учащегося</label>
+    <input class="form-control" type="text" id="inputPupilLogin"
+           (keypress)="setPupilLogin($event.target.value)"
+           (change)="setPupilLogin($event.target.value)"
+           (blur)="setPupilLogin($event.target.value)">
+    <label class="input-group-text" for="inputPupilPassword">Введите пароль учащегося</label>
+    <input class="form-control" type="password" id="inputPupilPassword"
+           (keypress)="setPupilPassword($event.target.value)"
+           (change)="setPupilPassword($event.target.value)"
+           (blur)="setPupilPassword($event.target.value)">
+  </div>
+  <!--Group-->
+  <app-select-group (result)="setPupilGroup($event)"></app-select-group>
+  <div class="row">
+    <div class="col text-left">
+      <a class="btn btn-outline-primary" routerLink="/pupils">Ученики</a>
+    </div>
+    <div class="col text-right">
+      <button class="btn btn-outline-success" [disabled]="!isCanBeSaved()">Сохранить</button>
+    </div>
+  </div>
+</form>

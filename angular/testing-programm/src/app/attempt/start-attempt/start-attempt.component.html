@@ -1,50 +1,51 @@
 <form (ngSubmit)="onSubmit()">
-  <div class="container-lg bg-light">
-    <div class="row">
-      <div class="col-lg">
-        <div class="input-group-prepend">
-          <label class="input-group-text" for="inputSubjectSelect">Предмет</label>
-        </div>
-        <select class="custom-select" id="inputSubjectSelect" (change)="findTasksBySubject($event.target.value)">
-          <option>не выбран</option>
-          <option class="btn btn-outline-primary" *ngFor="let subject of subjects">{{subject.name}}</option>
-        </select>
-        <span *ngIf="getFoudTasks()">
-          <label class="input-group-text" for="inputTaskSelect">Задание</label>
-          <select class="custom-select" id="inputTaskSelect" [(ngModel)]="attempt.task">
-            <option class="btn btn-outline-primary" *ngFor="let task of getFoudTasks()">
-              <span class="bg-light">{{task.name}}</span>
-              <span class="bg-info text-white">{{task.taskType.name}}</span>
-            </option>
-          </select>
-        </span>
-      </div>
-      <div class="col-md">
-        <div class="input-group-prepend">
-          <label class="input-group-text" for="inputGroupSelect">Факультет</label>
-        </div>
-        <select class="custom-select" id="inputGroupSelect" (change)="findGroupsByFaculty($event.target.value)">
-          <option>не выбран</option>
-          <option *ngFor="let faculty of getFaculties()">{{faculty}}</option>
-        </select>
-        <span *ngIf="getFoundGroups()">
-          <label class="input-group-text" for="inputGroupNoSelect">Номер группы</label>
-          <select class="custom-select" id="inputGroupNoSelect" [(ngModel)]="attempt.group">
-            <option class="btn btn-outline-primary bg-light" *ngFor="let group of getFoundGroups()">
-              {{group.groupNo}}
-            </option>
-          </select>
-        </span>
-      </div>
+  <div class="container-lg">
+    <div class="container-lg align-content-center h2">
+      Старт нового задания для учащихся
     </div>
-    <div class="row">
-      <div class="col">
-        <label for="inputAttemptTime">Введите время, отводимое на работу. В минутах</label>
-        <input type="text" id="inputAttemptTime" (change)="setAttemptTime($event.target.value)">
+    <!--Task selection-->
+    <div class="container-lg bg-light">
+    <div class="text-center h3 bg-primary text-white">Выберите задание</div>
+    <div class="container input-group-lg">
+      <div class="input-group-prepend">
+        <label class="input-group-text" for="inputSubjectSelect">Предмет</label>
       </div>
+      <select class="custom-select" id="inputSubjectSelect" name="inputSubject"
+              [(ngModel)]="selectedTask.subject" (change)="selectSubject()">
+        <option disabled>Не выбран</option>
+        <option *ngFor="let subject of subjects" [ngValue]="subject">
+          {{subject.name}}
+        </option>
+      </select>
+      <label class="input-group-text" for="inputTaskTypeSelect">Тип задания</label>
+      <select class="custom-select" id="inputTaskTypeSelect" name="inputTaskType"
+              [disabled]="isSubjectSelected()" [(ngModel)]="selectedTask.type" (change)="selectTaskType()">
+        <option disabled>Не выбран</option>
+        <option *ngFor="let taskType of taskTypes" [ngValue]="taskType">
+          <span class="bg-light">{{taskType.name}}</span>
+        </option>
+      </select>
+      <label class="input-group-text" for="inputTaskSelect">Задание</label>
+      <select class="custom-select" id="inputTaskSelect" name="inputTask"
+              [disabled]="isTaskTypeSelected()" [(ngModel)]="attempt.task">
+        <option disabled>Не выбрано</option>
+        <option *ngFor="let task of tasks" [ngValue]="task">
+          <span class="bg-light">{{task.name}}</span>
+        </option>
+      </select>
     </div>
-    <div class="row">
-      <button></button>
+    </div>
+    <app-select-group (result)="selectGroup($event)"></app-select-group>
+    <!--Time setting-->
+    <div class="container input-group-lg">
+    <label class="input-group-text" for="inputAttemptTime">Введите количество минут, отводимых на задание</label>
+    <input class="form-control" type="number" id="inputAttemptTime" (change)="setAttemptTime($event.target.value)">
+    </div>
+    <!--Task start-->
+    <div class="text-right">
+    <button type="submit" class="btn btn-outline-success" [disabled]="!isPossibleToStart()">
+      Активировать задание
+    </button>
     </div>
   </div>
 </form>

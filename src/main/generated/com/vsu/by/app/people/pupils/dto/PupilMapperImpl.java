@@ -29,6 +29,9 @@ public class PupilMapperImpl implements PupilMapper {
         pupil.setName( pupilInfoDto.getName() );
         pupil.setSurname( pupilInfoDto.getSurname() );
         pupil.setPatronymic( pupilInfoDto.getPatronymic() );
+        pupil.setLogin( pupilInfoDto.getLogin() );
+        pupil.setRole( roleDtoToRole( pupilInfoDto.getRole() ) );
+        pupil.setGroup( groupInfoDtoToGroup( pupilInfoDto.getGroup() ) );
 
         return pupil;
     }
@@ -88,22 +91,6 @@ public class PupilMapperImpl implements PupilMapper {
     }
 
     @Override
-    public PupilInfoDto toPupilInfoDto(Pupil pupil) {
-        if ( pupil == null ) {
-            return null;
-        }
-
-        PupilInfoDto pupilInfoDto = new PupilInfoDto();
-
-        pupilInfoDto.setId( pupil.getId() );
-        pupilInfoDto.setName( pupil.getName() );
-        pupilInfoDto.setSurname( pupil.getSurname() );
-        pupilInfoDto.setPatronymic( pupil.getPatronymic() );
-
-        return pupilInfoDto;
-    }
-
-    @Override
     public List<PupilInfoDto> toPupilsInfoDto(List<Pupil> pupilsInfoDto) {
         if ( pupilsInfoDto == null ) {
             return null;
@@ -135,6 +122,20 @@ public class PupilMapperImpl implements PupilMapper {
         pupilDetailDto.setGroup( groupToGroupInfoDto( pupil.getGroup() ) );
 
         return pupilDetailDto;
+    }
+
+    @Override
+    public List<PupilDetailDto> toPupilDetailDto(List<Pupil> pupil) {
+        if ( pupil == null ) {
+            return null;
+        }
+
+        List<PupilDetailDto> list = new ArrayList<PupilDetailDto>( pupil.size() );
+        for ( Pupil pupil1 : pupil ) {
+            list.add( toPupilDetailDto( pupil1 ) );
+        }
+
+        return list;
     }
 
     @Override
@@ -180,6 +181,7 @@ public class PupilMapperImpl implements PupilMapper {
         group.setId( groupInfoDto.getId() );
         group.setGroupNo( groupInfoDto.getGroupNo() );
         group.setFaculty( groupInfoDto.getFaculty() );
+        group.setCourse( groupInfoDto.getCourse() );
 
         return group;
     }
@@ -221,8 +223,9 @@ public class PupilMapperImpl implements PupilMapper {
         GroupInfoDto groupInfoDto = new GroupInfoDto();
 
         groupInfoDto.setId( group.getId() );
-        groupInfoDto.setGroupNo( group.getGroupNo() );
         groupInfoDto.setFaculty( group.getFaculty() );
+        groupInfoDto.setCourse( group.getCourse() );
+        groupInfoDto.setGroupNo( group.getGroupNo() );
 
         return groupInfoDto;
     }

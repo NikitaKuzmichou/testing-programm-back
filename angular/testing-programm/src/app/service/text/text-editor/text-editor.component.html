@@ -1,0 +1,4 @@
+<div class="container input-group-lg">
+  <textarea autosize class="form-control text-editor" [(ngModel)]="initialText" (keypress)="update()"
+            (blur)="update()" (change)="update()" [disabled]="isDisabled()">{{initialText}}</textarea>
+</div>

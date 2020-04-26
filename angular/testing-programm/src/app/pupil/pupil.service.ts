@@ -1,7 +1,6 @@
-
-import { HttpClient }         from '@angular/common/http';
-import { Injectable }         from '@angular/core';
-import { Observable }         from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
 import { Pupil } from './pupil';
 
 @Injectable({
@@ -10,24 +9,28 @@ import { Pupil } from './pupil';
     private url: string;
     constructor(private http: HttpClient) {}
 
+    setUrl(url: string) {
+        this.url = url;
+    }
+
     getPupil(id: number): Pupil {
-        var response = this.http.get<Pupil>(this.url + "/" + id);
+        const response = this.http.get<Pupil>(this.url + '/' + id);
         return this.parseToPupil(response);
     }
 
     getPupils(): Array<Pupil> {
-        var response = this.http.get<Array<Pupil>>(this.url);
+        const response = this.http.get<Array<Pupil>>(this.url);
         return this.parseToListPupils(response);
     }
 
     savePupil(pupil: Pupil) {
-        var response = this.http.post<Pupil>(this.url, pupil);
+        const response = this.http.post<Pupil>(this.url, pupil);
         return this.parseToPupil(response);
     }
 
     deletePupil(id: number) {
-        var response;
-        this.http.delete(this.url + "/" + id).subscribe(item => {
+        let response;
+        this.http.delete(this.url + '/' + id).subscribe(item => {
             response = item;
         }, error => {
             console.error(error);
@@ -36,7 +39,7 @@ import { Pupil } from './pupil';
     }
 
     private parseToPupil(observable: Observable<Pupil>): Pupil {
-        var pupil = new Pupil();
+        const pupil = new Pupil();
         observable.subscribe(item => {
             pupil.id = item.id;
             pupil.name = item.name;
@@ -53,10 +56,10 @@ import { Pupil } from './pupil';
     }
 
     private parseToListPupils(observable: Observable<Array<Pupil>>): Array<Pupil> {
-        var pupils = new Array<Pupil>();
+        const pupils = new Array<Pupil>();
         observable.subscribe(response => {
             response.map(item => {
-                var pupil = new Pupil();
+                const pupil = new Pupil();
                 pupil.id = item.id;
                 pupil.name = item.name;
                 pupil.surname = item.surname;
@@ -66,7 +69,7 @@ import { Pupil } from './pupil';
                 pupil.login = item.login;
                 pupil.password = item.password;
                 pupils.push(pupil);
-            })
+            });
         }, error => {
             console.error(error);
         });

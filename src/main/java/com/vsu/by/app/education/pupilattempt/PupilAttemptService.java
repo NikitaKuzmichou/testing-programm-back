@@ -1,14 +1,11 @@
 package com.vsu.by.app.education.pupilattempt;
 
-import com.vsu.by.app.education.attempt.Attempt;
-import com.vsu.by.app.education.task.Task;
 import com.vsu.by.app.people.pupils.Pupil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -51,6 +48,11 @@ public class PupilAttemptService {
     @Transactional(readOnly = true)
     public List<PupilAttempt> findAll() {
         return this.pupilAttemptRepository.findAll();
+    }
+
+    @Transactional(readOnly = true)
+    public List<PupilAttempt> findAllByPupilId(final Long pupilId) {
+        return this.pupilAttemptRepository.findAllByPupilId(pupilId);
     }
 
     @Transactional(readOnly = true)

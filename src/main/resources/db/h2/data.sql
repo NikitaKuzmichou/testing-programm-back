@@ -1,12 +1,11 @@
-
 INSERT INTO Role(id, name) VALUES
 (1, 'ADMIN'),
 (2, 'TEACHER'),
 (3, 'PUPIL');
 
-INSERT INTO Users(id, role_id, login, password, name, surname, patronymic) VALUES
-(1, 2, 'teacher', 'teacher', 'Учитель_Имя', 'Учитель_Фамилия', 'Учитель_Отчество'),
-(2, 2, 'pupil', 'pupil', 'Ученик_Имя', 'Ученик_Фамилия', 'Ученик_Отчество');
+INSERT INTO User(id, role_id, user_type, login, password, name, surname, patronymic) VALUES
+(1, 2, 2 ,'teacher', 'teacher', 'Андрей', 'Петрович', 'Петросянович'),
+(2, 2, 3, 'pupil', 'pupil', 'Никита', 'Кузьмичёв', 'Васильевич');
 
 INSERT INTO Groups(id, groupNo, faculty, course) VALUES
 (1, 15, 'ФМиИТ', 1);
@@ -14,16 +13,22 @@ INSERT INTO Groups(id, groupNo, faculty, course) VALUES
 INSERT INTO Teacher(id) VALUES
 (1);
 
-INSERT INTO Pupil(id, group_id) VALUES
+INSERT INTO Pupil(pupil_id, group_id) VALUES
 (2, 1);
+
+INSERT INTO GROUPS_USER(group_id, user_id) VALUES
+(1, 2);
 
 INSERT INTO Subject(id, name) VALUES
 (1, 'Русский язык');
 
-INSERT INTO TaskType(id, name, task_xsd, result_xsd) VALUES
-(1, 'диктант', null, null),
-(2, 'почти диктант', null, null),
-(3, 'просто для красоты', null, null);
+INSERT INTO TaskType(id, name) VALUES
+(1, 'Диктант'),
+(2, 'Почти диктант'),
+(3, 'Просто для красоты');
 
-INSERT INTO Task(id, teacher_id, taskType_id, subject_id, name, description, taskText) VALUES
-(1, 1, 1, 1, '<test>', 'работа для теста', 'На лугу растёт зелёная трава!');
+INSERT INTO Task(id, teacher_id, type_id, subject_id, name, description, taskText) VALUES
+(1, 1, 1, 1, '<test>', 'задание для теста', 'На лугу растёт зелёная трава!'),
+(2, 1, 1, 1, 'Айсберги', 'Из энциклопедии «Я познаю мир» (145 слов)', 'Одно из ярких впечатлений от плавания в Антарктиду - встреча с первым айсбергом. В ясный солнечный день даль моря внезапно заволакивается туманом, от которого веет прохладой. Корабль входит в туманную массу, и вдруг высоко-высоко над клочьями тумана возникают башни какого-то сказочного белого замка. Потом проступают контуры чего-то громадного. На сотни метров, а то и на километры тянется ледяной остров. Окруженный холодным туманом, он плывет, гонимый течением, и медленно тает под лучами солнца.' ||
+                                                                      'Айсберги — это крупные обломки ледников, плывущие по морю. Их далеко уносят морские течения. Удивительное дело: иногда ледяные горы плывут как будто бы против течения. Происходит так потому, что над поверхностью воды возвышается только одна девятая часть всего айсберга, остальная погружена глубоко в воду, где течение порой противоположно тому, что на поверхности. Над поверхностью воды айсберг возвышается на семьдесят - сто метров.' ||
+                                                                      'Перед Арктикой и Антарктикой выстраиваются целые флотилии готовых к плаванию ледяных гор — айсбергов.');

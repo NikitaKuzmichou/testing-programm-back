@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { Role } from '../role';
+import { RoleService } from '../role.service';
+import { ServerRequestUrls } from '../../ServerRequestUrls';
 
 @Component({
   selector: 'app-roles',
@@ -7,9 +10,17 @@ import { Component, OnInit } from '@angular/core';
 })
 export class RolesComponent implements OnInit {
 
-  constructor() { }
+  roles: Role[];
 
-  ngOnInit() {
+  constructor(private roleService: RoleService) { 
+    this.roleService.setUrl(ServerRequestUrls.ROLE);
   }
 
+  ngOnInit() {
+    this.roles = this.getRolesRequest();
+  }
+
+  private getRolesRequest() {
+    return this.roleService.getRoles();
+  }
 }

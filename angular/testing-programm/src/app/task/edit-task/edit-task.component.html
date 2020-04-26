@@ -1,0 +1,53 @@
+<form (ngSubmit)="updateTask()">
+  <div class="container">
+    <div class="text-center h2">Добавить новое задание</div>
+    <!--Task name-->
+    <div class="container input-group-lg">
+      <label class="input-group-text" for="inputAttemptTime">Введите название задания</label>
+      <input class="form-control" type="text" id="inputAttemptTime" value="{{task.name}}"
+             (keypress)="setTaskName($event.target.value)"
+             (change)="setTaskName($event.target.value)"
+             (blur)="setTaskName($event.target.value)">
+      <br>
+    </div>
+    <!--Task subject-->
+    <div class="container">
+      <div class="col">
+        <label class="input-group-text" for="inputSubjectSelect">Предмет</label>
+        <select class="custom-select" id="inputSubjectSelect" name="inputSubject"
+                [(ngModel)]="task.subject" (change)="subjectSelected()">
+          <option selected [ngValue]="task.subject">{{task.subject.name}}</option>
+          <option *ngFor="let subject of subjects" [ngValue]="subject">
+            <span class="bg-light">{{subject.name}}</span>
+          </option>
+        </select>
+      </div>
+      <br>
+      <div class="col">
+        <label class="input-group-text" for="inputTaskTypeSelect">Тип задания</label>
+        <select class="custom-select" id="inputTaskTypeSelect" name="inputTaskType"
+                [disabled]="!task.hasSubject()" [(ngModel)]="task.type">
+          <option selected [ngValue]="task.type">{{task.type.name}}</option>
+          <option *ngFor="let taskType of taskTypes" [ngValue]="taskType">
+            <span class="bg-light">{{taskType.name}}</span>
+          </option>
+        </select>
+      </div>
+      <br>
+    </div>
+    <!--Task description-->
+    <div class="col">
+      <div class="text-center h4">Описание работы</div>
+      <app-text-editor [initialText]="task.description" [disabled]="false" (outText)="setTaskDescription($event)"></app-text-editor>
+    </div>
+    <!--Task text-->
+    <br>
+    <div class="col">
+      <div class="text-center h4">Текст работы</div>
+      <app-text-editor [initialText]="task.taskText" [disabled]="false" (outText)="setTaskText($event)"></app-text-editor>
+    </div>
+    <div class="text-right">
+      <button class="btn btn-outline-success" [disabled]="!isCanBeUpdated()">Сохранить</button>
+    </div>
+  </div>
+</form>

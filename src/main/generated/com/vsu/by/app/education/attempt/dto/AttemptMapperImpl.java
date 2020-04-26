@@ -5,10 +5,17 @@ import com.vsu.by.app.education.pupilattempt.PupilAttempt;
 import com.vsu.by.app.education.pupilattempt.dto.PupilAttemptInfoDto;
 import com.vsu.by.app.education.task.Task;
 import com.vsu.by.app.education.task.dto.TaskDetailDto;
+import com.vsu.by.app.education.task.dto.TaskInfoDto;
+import com.vsu.by.app.education.task.dto.TaskMinInfoDto;
+import com.vsu.by.app.education.task.dto.TaskViewDto;
 import com.vsu.by.app.education.tasktype.TaskType;
 import com.vsu.by.app.education.tasktype.dto.TaskTypeInfoDto;
+import com.vsu.by.app.people.groups.Group;
+import com.vsu.by.app.people.groups.dto.GroupInfoDto;
 import com.vsu.by.app.people.pupils.Pupil;
 import com.vsu.by.app.people.pupils.dto.PupilInfoDto;
+import com.vsu.by.app.role.Role;
+import com.vsu.by.app.role.dto.RoleDto;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.Generated;
@@ -38,18 +45,17 @@ public class AttemptMapperImpl implements AttemptMapper {
     }
 
     @Override
-    public Attempt fromAttemptDetailDto(AttemptDetailDto attemptDetailDto) {
-        if ( attemptDetailDto == null ) {
+    public Attempt fromAttemptViewDto(AttemptViewDto attemptViewDto) {
+        if ( attemptViewDto == null ) {
             return null;
         }
 
         Attempt attempt = new Attempt();
 
-        attempt.setId( attemptDetailDto.getId() );
-        attempt.setPupilsAttempts( pupilAttemptInfoDtoListToPupilAttemptList( attemptDetailDto.getPupilsAttempts() ) );
-        attempt.setTask( taskDetailDtoToTask( attemptDetailDto.getTask() ) );
-        attempt.setStart( attemptDetailDto.getStart() );
-        attempt.setEnd( attemptDetailDto.getEnd() );
+        attempt.setId( attemptViewDto.getId() );
+        attempt.setTask( taskViewDtoToTask( attemptViewDto.getTask() ) );
+        attempt.setStart( attemptViewDto.getStart() );
+        attempt.setEnd( attemptViewDto.getEnd() );
 
         return attempt;
     }
@@ -63,6 +69,7 @@ public class AttemptMapperImpl implements AttemptMapper {
         Attempt attempt = new Attempt();
 
         attempt.setId( attemptInfoDto.getId() );
+        attempt.setTask( taskInfoDtoToTask( attemptInfoDto.getTask() ) );
         attempt.setStart( attemptInfoDto.getStart() );
         attempt.setEnd( attemptInfoDto.getEnd() );
 
@@ -78,6 +85,36 @@ public class AttemptMapperImpl implements AttemptMapper {
         List<Attempt> list = new ArrayList<Attempt>( attemptInfoDto.size() );
         for ( AttemptInfoDto attemptInfoDto1 : attemptInfoDto ) {
             list.add( fromAttemptInfoDto( attemptInfoDto1 ) );
+        }
+
+        return list;
+    }
+
+    @Override
+    public Attempt fromAttemptMinInfoDto(AttemptMinInfoDto attemptMinInfoDto) {
+        if ( attemptMinInfoDto == null ) {
+            return null;
+        }
+
+        Attempt attempt = new Attempt();
+
+        attempt.setId( attemptMinInfoDto.getId() );
+        attempt.setTask( taskMinInfoDtoToTask( attemptMinInfoDto.getTask() ) );
+        attempt.setStart( attemptMinInfoDto.getStart() );
+        attempt.setEnd( attemptMinInfoDto.getEnd() );
+
+        return attempt;
+    }
+
+    @Override
+    public List<Attempt> fromAttemptMinInfoDto(List<AttemptMinInfoDto> attemptMinInfoDto) {
+        if ( attemptMinInfoDto == null ) {
+            return null;
+        }
+
+        List<Attempt> list = new ArrayList<Attempt>( attemptMinInfoDto.size() );
+        for ( AttemptMinInfoDto attemptMinInfoDto1 : attemptMinInfoDto ) {
+            list.add( fromAttemptMinInfoDto( attemptMinInfoDto1 ) );
         }
 
         return list;
@@ -101,49 +138,47 @@ public class AttemptMapperImpl implements AttemptMapper {
     }
 
     @Override
-    public AttemptDetailDto toAttemptDetailDto(Attempt attempt) {
+    public AttemptViewDto toAttemptViewDto(Attempt attempt) {
         if ( attempt == null ) {
             return null;
         }
 
-        AttemptDetailDto attemptDetailDto = new AttemptDetailDto();
+        AttemptViewDto attemptViewDto = new AttemptViewDto();
 
-        attemptDetailDto.setId( attempt.getId() );
-        attemptDetailDto.setTask( taskToTaskDetailDto( attempt.getTask() ) );
-        attemptDetailDto.setPupilsAttempts( pupilAttemptListToPupilAttemptInfoDtoList( attempt.getPupilsAttempts() ) );
-        attemptDetailDto.setStart( attempt.getStart() );
-        attemptDetailDto.setEnd( attempt.getEnd() );
+        attemptViewDto.setId( attempt.getId() );
+        attemptViewDto.setTask( taskToTaskViewDto( attempt.getTask() ) );
+        attemptViewDto.setStart( attempt.getStart() );
+        attemptViewDto.setEnd( attempt.getEnd() );
 
-        return attemptDetailDto;
+        return attemptViewDto;
     }
 
-    @Override
-    public AttemptInfoDto toAttemptInfoDto(Attempt attempt) {
-        if ( attempt == null ) {
+    protected Role roleDtoToRole(RoleDto roleDto) {
+        if ( roleDto == null ) {
             return null;
         }
 
-        AttemptInfoDto attemptInfoDto = new AttemptInfoDto();
+        Role role = new Role();
 
-        attemptInfoDto.setId( attempt.getId() );
-        attemptInfoDto.setStart( attempt.getStart() );
-        attemptInfoDto.setEnd( attempt.getEnd() );
+        role.setId( roleDto.getId() );
+        role.setName( roleDto.getName() );
 
-        return attemptInfoDto;
+        return role;
     }
 
-    @Override
-    public List<AttemptInfoDto> toAttemptInfoDto(List<Attempt> attempts) {
-        if ( attempts == null ) {
+    protected Group groupInfoDtoToGroup(GroupInfoDto groupInfoDto) {
+        if ( groupInfoDto == null ) {
             return null;
         }
 
-        List<AttemptInfoDto> list = new ArrayList<AttemptInfoDto>( attempts.size() );
-        for ( Attempt attempt : attempts ) {
-            list.add( toAttemptInfoDto( attempt ) );
-        }
+        Group group = new Group();
 
-        return list;
+        group.setId( groupInfoDto.getId() );
+        group.setGroupNo( groupInfoDto.getGroupNo() );
+        group.setFaculty( groupInfoDto.getFaculty() );
+        group.setCourse( groupInfoDto.getCourse() );
+
+        return group;
     }
 
     protected Pupil pupilInfoDtoToPupil(PupilInfoDto pupilInfoDto) {
@@ -157,6 +192,9 @@ public class AttemptMapperImpl implements AttemptMapper {
         pupil.setName( pupilInfoDto.getName() );
         pupil.setSurname( pupilInfoDto.getSurname() );
         pupil.setPatronymic( pupilInfoDto.getPatronymic() );
+        pupil.setLogin( pupilInfoDto.getLogin() );
+        pupil.setRole( roleDtoToRole( pupilInfoDto.getRole() ) );
+        pupil.setGroup( groupInfoDtoToGroup( pupilInfoDto.getGroup() ) );
 
         return pupil;
     }
@@ -218,6 +256,49 @@ public class AttemptMapperImpl implements AttemptMapper {
         return task;
     }
 
+    protected Task taskViewDtoToTask(TaskViewDto taskViewDto) {
+        if ( taskViewDto == null ) {
+            return null;
+        }
+
+        Task task = new Task();
+
+        task.setId( taskViewDto.getId() );
+        task.setName( taskViewDto.getName() );
+        task.setType( taskTypeInfoDtoToTaskType( taskViewDto.getType() ) );
+        task.setTaskText( taskViewDto.getTaskText() );
+
+        return task;
+    }
+
+    protected Task taskInfoDtoToTask(TaskInfoDto taskInfoDto) {
+        if ( taskInfoDto == null ) {
+            return null;
+        }
+
+        Task task = new Task();
+
+        task.setId( taskInfoDto.getId() );
+        task.setName( taskInfoDto.getName() );
+        task.setType( taskTypeInfoDtoToTaskType( taskInfoDto.getType() ) );
+
+        return task;
+    }
+
+    protected Task taskMinInfoDtoToTask(TaskMinInfoDto taskMinInfoDto) {
+        if ( taskMinInfoDto == null ) {
+            return null;
+        }
+
+        Task task = new Task();
+
+        task.setId( taskMinInfoDto.getId() );
+        task.setName( taskMinInfoDto.getName() );
+        task.setType( taskTypeInfoDtoToTaskType( taskMinInfoDto.getType() ) );
+
+        return task;
+    }
+
     protected TaskTypeInfoDto taskTypeToTaskTypeInfoDto(TaskType taskType) {
         if ( taskType == null ) {
             return null;
@@ -246,6 +327,34 @@ public class AttemptMapperImpl implements AttemptMapper {
         return taskDetailDto;
     }
 
+    protected GroupInfoDto groupToGroupInfoDto(Group group) {
+        if ( group == null ) {
+            return null;
+        }
+
+        GroupInfoDto groupInfoDto = new GroupInfoDto();
+
+        groupInfoDto.setId( group.getId() );
+        groupInfoDto.setFaculty( group.getFaculty() );
+        groupInfoDto.setCourse( group.getCourse() );
+        groupInfoDto.setGroupNo( group.getGroupNo() );
+
+        return groupInfoDto;
+    }
+
+    protected RoleDto roleToRoleDto(Role role) {
+        if ( role == null ) {
+            return null;
+        }
+
+        RoleDto roleDto = new RoleDto();
+
+        roleDto.setId( role.getId() );
+        roleDto.setName( role.getName() );
+
+        return roleDto;
+    }
+
     protected PupilInfoDto pupilToPupilInfoDto(Pupil pupil) {
         if ( pupil == null ) {
             return null;
@@ -254,9 +363,12 @@ public class AttemptMapperImpl implements AttemptMapper {
         PupilInfoDto pupilInfoDto = new PupilInfoDto();
 
         pupilInfoDto.setId( pupil.getId() );
+        pupilInfoDto.setLogin( pupil.getLogin() );
         pupilInfoDto.setName( pupil.getName() );
         pupilInfoDto.setSurname( pupil.getSurname() );
         pupilInfoDto.setPatronymic( pupil.getPatronymic() );
+        pupilInfoDto.setGroup( groupToGroupInfoDto( pupil.getGroup() ) );
+        pupilInfoDto.setRole( roleToRoleDto( pupil.getRole() ) );
 
         return pupilInfoDto;
     }
@@ -288,5 +400,20 @@ public class AttemptMapperImpl implements AttemptMapper {
         }
 
         return list1;
+    }
+
+    protected TaskViewDto taskToTaskViewDto(Task task) {
+        if ( task == null ) {
+            return null;
+        }
+
+        TaskViewDto taskViewDto = new TaskViewDto();
+
+        taskViewDto.setId( task.getId() );
+        taskViewDto.setName( task.getName() );
+        taskViewDto.setType( taskTypeToTaskTypeInfoDto( task.getType() ) );
+        taskViewDto.setTaskText( task.getTaskText() );
+
+        return taskViewDto;
     }
 }

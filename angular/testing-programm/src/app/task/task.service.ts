@@ -1,7 +1,6 @@
-
-import { HttpClient }         from '@angular/common/http';
-import { Injectable }         from '@angular/core';
-import { Observable }         from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
 import { Task } from './task';
 
 @Injectable({
@@ -15,23 +14,33 @@ import { Task } from './task';
     }
 
     getTask(id: number): Task {
-        var response = this.http.get<Task>(this.url + "/" + id);
+        const response = this.http.get<Task>(this.url + '/' + id);
         return this.parseToTask(response);
     }
 
     getTasks(): Array<Task> {
-        var response = this.http.get<Array<Task>>(this.url);
+        const response = this.http.get<Array<Task>>(this.url);
         return this.parseToListTasks(response);
     }
 
+    getTasksBySubjectAndTaskType(subjectId: number, taskTypeId: number): Array<Task> {
+        const response = this.http.get<Array<Task>>(this.url + '/' + subjectId + '/' + taskTypeId);
+        return this.parseToListTasks(response);
+    }
+
+    updateTask(task: Task) {
+        const response = this.http.put<Task>(this.url, task);
+        return this.parseToTask(response);
+    }
+
     saveTask(task: Task) {
-        var response = this.http.post<Task>(this.url, task);
+        const response = this.http.post<Task>(this.url, task);
         return this.parseToTask(response);
     }
 
     deleteTask(id: number) {
-        var response;
-        this.http.delete(this.url + "/" + id).subscribe(item => {
+        let response;
+        this.http.delete(this.url + '/' + id).subscribe(item => {
             response = item;
         }, error => {
             console.error(error);
@@ -40,13 +49,13 @@ import { Task } from './task';
     }
 
     private parseToTask(observable: Observable<Task>): Task {
-        var task = new Task();
+        const task = new Task();
         observable.subscribe(item => {
             task.id = item.id;
             task.name = item.name;
             task.subject = item.subject;
             task.taskText = item.taskText;
-            task.taskType = item.taskType;
+            task.type = item.type;
             task.uploader = item.uploader;
             task.description = item.description;
         }, error => {
@@ -56,19 +65,19 @@ import { Task } from './task';
     }
 
     private parseToListTasks(observable: Observable<Array<Task>>): Array<Task> {
-        var tasks = new Array<Task>();
+        const tasks = new Array<Task>();
         observable.subscribe(response => {
             response.map(item => {
-                var task = new Task();
+                const task = new Task();
                 task.id = item.id;
                 task.name = item.name;
                 task.subject = item.subject;
                 task.taskText = item.taskText;
-                task.taskType = item.taskType;
+                task.type = item.type;
                 task.uploader = item.uploader;
                 task.description = item.description;
                 tasks.push(task);
-            })
+            });
         }, error => {
             console.error(error);
         });

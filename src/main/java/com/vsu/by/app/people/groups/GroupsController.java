@@ -14,9 +14,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
+import java.util.*;
 
 @RestController
 @RequestMapping("groups")
@@ -51,9 +49,36 @@ public class GroupsController {
         }
     }
 
+    @GetMapping("/faculties")
+    public ResponseEntity<Set<String>> getFaculties() {
+        Set<String> faculties = new TreeSet<>();
+        for (Group group : this.groupService.findAll()) {
+            faculties.add(group.getFaculty());
+        }
+        return new ResponseEntity<>(faculties, HttpStatus.OK);
+    }
+
+    @GetMapping("/{faculty}/courses")
+    public ResponseEntity<Set<Integer>> getCourses(@PathVariable("faculty") String faculty) {
+        Set<Integer> courses = new TreeSet<>();
+        for (Group group : this.groupService.findAll()) {
+            if (Objects.equals(faculty, group.getFaculty())) {
+                courses.add(group.getCourse());
+            }
+        }
+        return new ResponseEntity<>(courses, HttpStatus.OK);
+    }
+
+    @GetMapping("/{faculty}/{course}")
+    public ResponseEntity<List<GroupInfoDto>> getGroupsNumbers(@PathVariable("faculty") String faculty,
+                                                         @PathVariable("course") Integer course) {
+        List<Group> groups = this.groupService.getAllByFacultyAndCourse(faculty, course);
+        return new ResponseEntity<>(this.groupMapper.toGroupInfoDto(groups), HttpStatus.OK);
+    }
+
     /** TODO FOR ADMIN
     @PostMapping
-    public ResponseEntity<String> addGroup(@RequestBody AddGrpoupDto group) {
+    public ResponseEntity<String> addGroup(@RequestBody AddGroupDto group) {
 
     }
     */

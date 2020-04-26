@@ -1,7 +1,10 @@
-import { HttpClient }         from '@angular/common/http';
-import { Injectable }         from '@angular/core';
-import { Observable }         from 'rxjs';
-import { Attempt }            from './attempt';
+import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
+import { Attempt } from './attempt';
+import { Task } from '../task/task';
+import { Subject } from '../subject/subject';
+import { map } from 'rxjs/operators';
 
 @Injectable({
     providedIn: 'root'
@@ -14,54 +17,57 @@ import { Attempt }            from './attempt';
     }
 
     getAttempt(id: number): Attempt {
-        var response = this.http.get<Attempt>(this.url + "/" + id);
+        const response = this.http.get<Attempt>(this.url + '/' + id);
         return this.parseToAttempt(response);
     }
 
     getAttempts(): Array<Attempt> {
-        var response = this.http.get<Array<Attempt>>(this.url);
+        const response = this.http.get<Array<Attempt>>(this.url);
         return this.parseToListAttempts(response);
     }
 
-    postAttempt(attempt: Attempt) {
-        var response = this.http.post(this.url, attempt);
-        var result;
+    getStartAttempt(): Array<Attempt> {
+      const response = this.http.get<Array<Attempt>>(this.url + '/start');
+      return this.parseToListAttempts(response);
+    }
+
+    postAttempt(attempt: Attempt, groupId: number) {
+        const response = this.http.post(this.url + '/' + groupId, attempt);
+        let result;
         response.subscribe(res => {
             result = res;
         }, error => {
             console.error(error);
-        })
+        });
         return result;
     }
 
-    private parseToAttempt(observable: Observable<Attempt>) {
-        var attempt: Attempt = new Attempt();
+    private parseToAttempt(observable: Observable<Attempt>): Attempt {
+        const attempt: Attempt = new Attempt();
         observable.subscribe( item => {
             attempt.id = item.id;
             attempt.start = item.start;
             attempt.end = item.end;
-            if (item.pupilAttempts) {
-                attempt.pupilAttempts = item.pupilAttempts;
-            }
+            attempt.task = item.task;
+            attempt.pupilsAttempts = item.pupilsAttempts;
         }, error => {
             console.error(error);
         });
         return attempt;
     }
 
-    private parseToListAttempts(observable: Observable<Array<Attempt>>) {
-        var attempts: Attempt[] = new Array<Attempt>();
+    private parseToListAttempts(observable: Observable<Array<Attempt>>): Array<Attempt> {
+        const attempts: Attempt[] = new Array<Attempt>();
         observable.subscribe( response => {
-            response.map( item => {
-                var attempt = new Attempt();
+            response.map(item => {
+                const attempt = new Attempt();
                 attempt.id = item.id;
                 attempt.start = item.start;
                 attempt.end = item.end;
-                if (item.pupilAttempts) {
-                    attempt.pupilAttempts = item.pupilAttempts;
-                }
+                attempt.task = item.task;
+                attempt.pupilsAttempts = item.pupilsAttempts;
                 attempts.push(attempt);
-            })
+            });
         }, error => {
             console.error(error);
         });

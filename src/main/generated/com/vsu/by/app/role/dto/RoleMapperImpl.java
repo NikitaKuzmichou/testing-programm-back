@@ -1,6 +1,8 @@
 package com.vsu.by.app.role.dto;
 
 import com.vsu.by.app.role.Role;
+import java.util.ArrayList;
+import java.util.List;
 import javax.annotation.Generated;
 import org.springframework.stereotype.Component;
 
@@ -36,5 +38,19 @@ public class RoleMapperImpl implements RoleMapper {
         roleDto.setName( role.getName() );
 
         return roleDto;
+    }
+
+    @Override
+    public List<RoleDto> toRoleDto(List<Role> role) {
+        if ( role == null ) {
+            return null;
+        }
+
+        List<RoleDto> list = new ArrayList<RoleDto>( role.size() );
+        for ( Role role1 : role ) {
+            list.add( toRoleDto( role1 ) );
+        }
+
+        return list;
     }
 }

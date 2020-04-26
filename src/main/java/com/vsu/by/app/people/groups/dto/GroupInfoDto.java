@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class GroupInfoDto {
     private Long id;
-    private int groupNo;
     private String faculty;
+    private int course;
+    private int groupNo;
 }

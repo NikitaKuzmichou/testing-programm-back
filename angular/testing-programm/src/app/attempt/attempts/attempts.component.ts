@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router/router';
 
 import { Attempt } from '../attempt';
 import { AttemptService } from '../attempt.service';
@@ -11,24 +10,25 @@ import { ServerRequestUrls } from '../../ServerRequestUrls';
   styleUrls: ['./attempts.component.css']
 })
 export class AttemptsComponent implements OnInit {
-  title = "Написанные работы";
   attempts: Attempt[];
 
   constructor(private attemptService: AttemptService) {
-    console.log("hey");
     this.attemptService.setUrl(ServerRequestUrls.ATTEMPT);
-    this.attempts = this.doRequest();
   }
 
   ngOnInit() {
+    this.attempts = this.getAttemptsRequest();
+  }
+
+  update() {
+    this.attempts = this.getAttemptsRequest();
   }
 
   isTimeOut(attempt: Attempt) {
-    return attempt.end.getTime() - Date.now() > 0;
+    return Date.now() - (new Date(attempt.end)).getTime() > 0;
   }
 
-  private doRequest() {
+  private getAttemptsRequest() {
     return this.attemptService.getAttempts();
   }
-
 }

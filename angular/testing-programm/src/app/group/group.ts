@@ -1,9 +1,9 @@
-import { Pupil } from "../pupil/pupil";
+import { Pupil } from '../pupil/pupil';
 
 export class Group {
     id: number;
     groupNo: number;
     faculty: string;
-    cource: number;
+    course: number;
     pupils: Pupil[] = new Array<Pupil>();
 }

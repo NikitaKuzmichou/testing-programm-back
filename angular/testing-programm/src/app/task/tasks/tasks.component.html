@@ -1,0 +1,41 @@
+<div class="container-lg">
+  <!--Info-->
+  <div class="container-lg">
+    <div class="row h2">
+      <div class="col-lg">Список загруженных заданий</div>
+    </div>
+    <div class="row h2">
+      <button class="btn btn-outline-success" (click)="update()">Обновить</button>
+      <div class="col-sm text-right">
+        <a class="btn btn-outline-primary" routerLink="/tasks-add">Добавить новое задание</a>
+      </div>
+    </div>
+  </div>
+  <!--Tasks-->
+  <table class="table table-borderless table-striped">
+    <thead class="bg-info text-white text-center">
+      <tr>
+        <th scope="col">Тип</th>
+        <th scope="col">Предмет</th>
+        <th scope="col">Название</th>
+        <th scope="col">Описание</th>
+        <th scope="col">Детали</th>
+        <th scope="col">Изменить</th>
+        <th scope="col">Удалить</th>
+      </tr>
+    </thead>
+    <tbody class="bg-light">
+      <ng-container *ngFor="let task of tasks">
+        <tr>
+          <td>{{task.type.name}}</td>
+          <td>{{task.subject.name}}</td>
+          <td><a routerLink="/tasks/{{task.id}}">{{task.name}}</a></td>
+          <td>{{task.description}}</td>
+          <td><a class="btn btn-outline-primary" routerLink="/tasks/{{task.id}}">Детали</a></td>
+          <td><a class="btn btn-outline-success" routerLink="/tasks-edit/{{task.id}}">Изменить</a></td>
+          <td><a class="btn btn-outline-danger" routerLink="/tasks-delete/{{task.id}}">Удалить</a></td>
+        </tr>
+      </ng-container>
+    </tbody>
+  </table>
+</div>

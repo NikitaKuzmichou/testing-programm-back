@@ -1,0 +1,58 @@
+<div class="container-lg">
+  <div class="row h2">
+    <button class="btn btn-outline-success" (click)="update()">Обновить</button>
+  </div>
+  <div class="bg-secondary text-center h3 text-white">Работы учащихся</div>
+  <table class="table table-borderless table-striped">
+    <thead class="bg-secondary">
+      <tr class="text-white">
+        <th scope="col">Предмет</th>
+        <th scope="col">Тип</th>
+        <th scope="col">Название</th>
+        <th scope="col">Факультет</th>
+        <th scope="col">Фамилия и имя</th>
+        <th scope="col">Оценка</th>
+        <th scope="col">Начало</th>
+        <th scope="col">Конец</th>
+        <th scope="col">Подробнее</th>
+      </tr>
+    </thead>
+    <tbody class="bg-light">
+      <ng-container *ngFor="let pupilsAttempt of pupilAttempts">
+        <tr>
+          <td>{{pupilsAttempt.attempt.task.subject.name}}</td>
+          <td>{{pupilsAttempt.attempt.task.type.name}}</td>
+          <td>
+            <a routerLink="/tasks/{{pupilsAttempt.attempt.task.id}}">
+              {{pupilsAttempt.attempt.task.name}}
+            </a>
+          </td>
+          <td>{{pupilsAttempt.pupil.group.faculty}}</td>
+          <td>
+            <a routerLink="/pupils/{{pupilsAttempt.pupil.id}}">
+              {{pupilsAttempt.pupil.surname + ' ' + pupilsAttempt.pupil.name}}
+            </a>
+          </td>
+          <td class="text-center">
+            <div class="bg-success" *ngIf="isGoodMark(pupilsAttempt.mark)">
+              {{pupilsAttempt.mark}}
+            </div>
+            <div class="bg-warning" *ngIf="isNormalMark(pupilsAttempt.mark)">
+              {{pupilsAttempt.mark}}
+            </div>
+            <div class="bg-danger" *ngIf="isBadMark(pupilsAttempt.mark)">
+              {{pupilsAttempt.mark}}
+            </div>
+          </td>
+          <td>{{pupilsAttempt.attempt.start | date:'dd/MM/yyyy  HH:mm'}}</td>
+          <td>{{pupilsAttempt.attempt.end | date: 'dd/MM/yyyy HH:mm'}}</td>
+          <td>
+            <a class="btn btn-outline-success" routerLink="/pupils-attempts-view/{{pupilsAttempt.pupil.id}}/{{pupilsAttempt.id}}">
+              Подробнее
+            </a>
+          </td>
+        </tr>
+      </ng-container>
+    </tbody>
+  </table>
+</div>

@@ -1,8 +1,7 @@
 package com.vsu.by.app.people.pupils;
 
-import com.vsu.by.app.education.pupilattempt.PupilAttemptService;
-import com.vsu.by.app.education.pupilattempt.dto.PupilAttemptInfoDto;
-import com.vsu.by.app.education.pupilattempt.dto.PupilAttemptMapper;
+import com.vsu.by.app.people.pupils.dto.PupilAddDto;
+import com.vsu.by.app.people.pupils.dto.PupilDetailDto;
 import com.vsu.by.app.people.pupils.dto.PupilInfoDto;
 import com.vsu.by.app.people.pupils.dto.PupilMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,27 +22,22 @@ public class PupilsController {
     private PupilMapper pupilMapper;
     @Autowired
     private PupilService pupilService;
-    @Autowired
-    private PupilAttemptService pupilAttemptService;
-    @Autowired
-    private PupilAttemptMapper pupilAttemptMapper;
 
     @GetMapping
-    public ResponseEntity<List<PupilInfoDto>> getPupils() {
+    public ResponseEntity<List<PupilDetailDto>> getPupils() {
         return new ResponseEntity<>(
-                this.pupilMapper.toPupilsInfoDto(this.pupilService.findAll()),
+                this.pupilMapper.toPupilDetailDto(this.pupilService.findAll()),
                 HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<List<PupilAttemptInfoDto>> getPupil(@PathVariable("id") Long id) {
+    public ResponseEntity<PupilDetailDto> getPupil(@PathVariable("id") Long id) {
         Optional<Pupil> pupil = this.pupilService.getPupil(id);
         if (pupil.isPresent()) {
             /**TODO possible additions:
              * сортировка по предметам, по которым были написаны\проведены работы*/
             return new ResponseEntity<>(
-                    this.pupilAttemptMapper.toPupilAttemptInfoDto(
-                            this.pupilAttemptService.findAllByPupil(pupil.get())),
+                    this.pupilMapper.toPupilDetailDto(pupil.get()),
                     HttpStatus.OK);
         } else {
             /**TODO EXCEPTION*/
@@ -51,11 +45,14 @@ public class PupilsController {
         }
     }
 
-    /**TODO FOR ADMIN
     @PostMapping
-    public ResponseEntity<String> addPupil(@RequestBody ) {
+    public ResponseEntity<PupilInfoDto> addPupil(@RequestBody PupilAddDto pupilAddDto) {
+        Pupil pupil = this.pupilMapper.fromPupilAddDto(pupilAddDto);
+        pupil = this.pupilService.savePupil(pupil);
+        return new ResponseEntity<>(
+                this.pupilMapper.toPupilInfoDto(pupil),
+                HttpStatus.ACCEPTED);
     }
-    */
 
     /** TODO FOR ADMIN AND PUPIL
     @PutMapping("/{id}")

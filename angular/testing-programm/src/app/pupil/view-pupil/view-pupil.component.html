@@ -1,1 +1,58 @@
-<p>view-pupil works!</p>
+<div class="container-lg">
+    <div class="text-center h3">Студент</div>
+    <div class="bg-light container">
+      <div class="text-center h5">{{pupil.getFullName()}}</div>
+      <div class="text-center h5">Факультет: {{pupil.group.faculty}}</div>
+      <div class="text-center h5">{{pupil.group.course}} курс</div>
+      <div class="text-center h5">{{pupil.group.groupNo}} группа</div>
+    </div>
+    <div class="row h2">
+      <button class="btn btn-outline-success" (click)="update()">Обновить</button>
+    </div>
+    <table class="table table-borderless table-striped">
+      <thead class="bg-secondary text-center">
+        <tr class="text-white">
+          <th scope="col">Предмет</th>
+          <th scope="col">Тип работы</th>
+          <th scope="col">Название задания</th>
+          <th scope="col">Оценка</th>
+          <th scope="col">Дата начала</th>
+          <th scope="col">Дата окончания</th>
+          <th scope="col">Подробности</th>
+        </tr>
+      </thead>
+      <tbody class="bg-light">
+        <ng-container *ngFor="let pupilAttempt of pupilAttempts">
+          <tr class="text-center">
+            <td>{{pupilAttempt.attempt.task.subject.name}}</td>
+            <td>{{pupilAttempt.attempt.task.type.name}}</td>
+            <td><a routerLink="/pupils-attempts-view/{{pupil.id}}/{{pupilAttempt.attempt.id}}">{{pupilAttempt.attempt.task.name}}</a></td>
+            <td>
+              <div class="bg-success" *ngIf="isGoodMark(pupilAttempt.mark)">
+                {{pupilAttempt.mark}}
+              </div>
+              <div class="bg-warning" *ngIf="isNormalMark(pupilAttempt.mark)">
+                {{pupilAttempt.mark}}
+              </div>
+              <div class="bg-danger" *ngIf="isBadMark(pupilAttempt.mark)">
+                {{pupilAttempt.mark}}
+              </div>
+            </td>
+            <td>{{pupilAttempt.attempt.start | date: 'HH:mm dd.MM.yyyy' }}</td>
+            <span *ngIf="isTimeOut(pupilAttempt.attempt); then timeOut else timeNotOut"></span>
+              <ng-template #timeOut>
+                <td class="bg-danger text-white">{{pupilAttempt.attempt.end | date: 'HH:mm dd.MM.yyyy' }}</td>
+              </ng-template>
+              <ng-template #timeNotOut>
+                <td class="bg-success">{{pupilAttempt.attempt.end | date: 'HH:mm dd.MM.yyyy' }}</td>
+              </ng-template>
+            <td>
+              <a routerLink="/pupils-attempts-view/{{pupil.id}}/{{pupilAttempt.attempt.id}}" class="btn btn-outline-primary">
+                Подробности
+              </a>
+            </td>
+          </tr>
+        </ng-container>
+      </tbody>
+    </table>
+  </div>

@@ -5,6 +5,8 @@ import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
+import java.util.List;
+
 @Mapper(injectionStrategy = InjectionStrategy.CONSTRUCTOR)
 public interface RoleMapper {
 
@@ -13,4 +15,6 @@ public interface RoleMapper {
     Role fromRoleDto(RoleDto roleDto);
 
     RoleDto toRoleDto(Role role);
+
+    List<RoleDto> toRoleDto(List<Role> role);
 }

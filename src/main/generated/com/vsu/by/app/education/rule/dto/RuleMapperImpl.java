@@ -59,7 +59,7 @@ public class RuleMapperImpl implements RuleMapper {
     }
 
     @Override
-    public RuleInfoDto toRuleInfoDto(RuleInfoDto ruleInfoDto) {
+    public RuleInfoDto toRuleInfoDto(Rule ruleInfoDto) {
         if ( ruleInfoDto == null ) {
             return null;
         }
@@ -80,22 +80,9 @@ public class RuleMapperImpl implements RuleMapper {
 
         List<RuleInfoDto> list = new ArrayList<RuleInfoDto>( rules.size() );
         for ( Rule rule : rules ) {
-            list.add( ruleToRuleInfoDto( rule ) );
+            list.add( toRuleInfoDto( rule ) );
         }
 
         return list;
-    }
-
-    protected RuleInfoDto ruleToRuleInfoDto(Rule rule) {
-        if ( rule == null ) {
-            return null;
-        }
-
-        RuleInfoDto ruleInfoDto = new RuleInfoDto();
-
-        ruleInfoDto.setId( rule.getId() );
-        ruleInfoDto.setName( rule.getName() );
-
-        return ruleInfoDto;
     }
 }

@@ -1,117 +1,108 @@
 import { Component, OnInit } from '@angular/core';
-import { Router }  from '@angular/router';
+import { Router} from '@angular/router';
 
 import { Attempt } from '../attempt';
 import { AttemptService } from '../attempt.service';
+import { Group } from '../../group/group';
 import { Task } from '../../task/task';
 import { TaskService } from '../../task/task.service';
-import { Group }  from '../../group/group';
-import { GroupService } from '../../group/group.service';
 import { ServerRequestUrls } from '../../ServerRequestUrls';
 import { Subject } from '../../subject/subject';
+import { TaskType } from '../../taskType/taskType';
 import { SubjectService } from '../../subject/subject.service';
+import { TaskTypeService } from '../../taskType/taskType.service';
 
 @Component({
   selector: 'app-start-attemt',
   templateUrl: './start-attempt.component.html',
   styleUrls: ['./start-attempt.component.css']
 })
-export class StartAttemtComponent implements OnInit {
-  title = "Начать новое задание";
-  groups: Group[];
-  tasks: Task[];
+export class StartAttemptComponent implements OnInit {
+  attempt: Attempt;
   subjects: Subject[];
-  sortedGroups = new Array<Group>();
-  sortedTasks= new Array<Task>();
-  attempt = new Attempt();
+  taskTypes: TaskType[];
+  tasks: Task[];
+  selectedTask: Task;
+  selectedGroup: Group;
 
-  constructor(private groupService: GroupService,
-              private taskService: TaskService,
+  constructor(private router: Router,
               private subjectService: SubjectService,
               private attemptService: AttemptService,
-              private router: Router) {
-                console.log("hey");
+              private taskTypeService: TaskTypeService,
+              private taskService: TaskService) {
     this.subjectService.setUrl(ServerRequestUrls.SUBJECT);
-    this.groupService.setUrl(ServerRequestUrls.GROUPS);
-    this.taskService.setUrl(ServerRequestUrls.TASK);
     this.attemptService.setUrl(ServerRequestUrls.ATTEMPT);
-    this.subjects = this.getSubjectsRequest();
-    this.groups = this.getGroupsRequest();
-    this.tasks = this.getTasksRequest();
+    this.taskTypeService.setUrl(ServerRequestUrls.TASK_TYPE);
+    this.taskService.setUrl(ServerRequestUrls.TASK);
   }
 
   ngOnInit() {
+    this.attempt = new Attempt();
+    this.selectedTask = new Task();
+    this.selectedTask.type = new TaskType();
+    this.selectedTask.subject = new Subject();
+    this.subjects = this.getSubjectsRequest();
   }
 
-  getFaculties() {
-    var faculties = new Array<string>();
-    this.groups.forEach(group => {
-      if (faculties.indexOf(group.faculty) == -1) {
-        faculties.push(group.faculty);
-      }
-    });
-    return faculties;
+  /**TODO если выбрать окончатель задание и поменять некоторый срединный этап - ничего не сбросится. Нужно починить*/
+  selectSubject() {
+    this.taskTypes = this.getTaskTypesRequest();
   }
 
-  getFoundGroups() {
-    return this.sortedGroups.length == 0 ? null : this.sortedGroups;
+  isSubjectSelected() {
+    return this.selectedTask.subject.id === undefined;
   }
 
-  getFoudTasks() {
-    return this.sortedTasks.length == 0 ? null : this.sortedTasks;
+  selectTaskType() {
+    this.tasks = this.getTaskRequest();
   }
 
-  findGroupsByFaculty(faculty) {
-    if (this.sortedGroups.length != 0 && this.sortedGroups[0].faculty == faculty) {
-      return this.sortedGroups;
+  isTaskTypeSelected() {
+    return this.selectedTask.type.id === undefined;
+  }
+
+  selectGroup(group) {
+    this.selectedGroup = group;
+  }
+
+  isPossibleToStart() {
+    const taskDefined = this.attempt.task !== undefined;
+    let groupDefined = false;
+    if (this.selectedGroup !== undefined) {
+      groupDefined = this.selectedGroup.id !== undefined;
     }
-    this.sortedGroups = new Array<Group>();
-    this.groups.forEach(group => {
-      if (group.faculty == faculty) {
-        this.sortedGroups.push(group);
-      }
-    });
-  }
-
-  /**TODO SORT BY SUBJECT AND BU TYPE */
-  findTasksBySubject(subject) {
-    if (this.sortedTasks.length != 0 && this.sortedTasks[0].subject == subject) {
-      return this.sortedTasks;
-    }
-    this.sortedTasks = new Array<Task>();
-    this.tasks.forEach(task => {
-      if (task.subject == subject) {
-        this.sortedTasks.push(task);
-      }
-    });
+    const attemptTimeDefined = this.attempt.start !== undefined;
+    return taskDefined && groupDefined && attemptTimeDefined;
   }
 
   setAttemptTime(minutes) {
-    let start = new Date();
-    let end = new Date(start.getTime + minutes);
-    this.attempt.start = start;
-    this.attempt.end = end;
+    if (!minutes) {
+      this.attempt.start = undefined;
+      this.attempt.end = undefined;
+      return;
+    }
+    this.attempt.start = Date.now();
+    this.attempt.end = this.attempt.start + minutes*60000;
   }
 
-  onSubmut() {
-    this.saveAttempt();
-    this.router.navigateByUrl("attempts");
+  onSubmit() {
+    this.saveAttempt(this.attempt, this.selectedGroup);
+    this.router.navigateByUrl('attempts');
   }
 
   private getSubjectsRequest() {
     return this.subjectService.getSubjects();
   }
 
-  private getGroupsRequest() {
-    return this.groupService.getGroups();
+  private getTaskTypesRequest() {
+    return this.taskTypeService.getTaskTypesBySubject(this.selectedTask.subject.id);
   }
 
-  private getTasksRequest() {
-    return this.taskService.getTasks();
+  private getTaskRequest() {
+    return this.taskService.getTasksBySubjectAndTaskType(this.selectedTask.subject.id, this.selectedTask.type.id);
   }
 
-  private saveAttempt() {
-    return this.attemptService.postAttempt(this.attempt);
+  private saveAttempt(attempt: Attempt, selectedGroup: Group) {
+    return this.attemptService.postAttempt(attempt, selectedGroup.id);
   }
-
 }

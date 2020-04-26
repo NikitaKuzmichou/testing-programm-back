@@ -1,0 +1,25 @@
+<div class="container">
+  <div class="text-center h3">Список групп</div>
+  <table class="bg-info text-white text-center">
+    <thead class="bg-info text-white text-center">
+      <tr>
+        <th scope="col">Факультет</th>
+        <th scope="col">Курс</th>
+        <th scope="col">Номер группы</th>
+        <th scope="col">Подробнее</th>
+      </tr>
+    </thead>
+    <tbody class="bg-light">
+      <ng-container *ngFor="let group of groups">
+        <tr>{{group.faculty}}</tr>
+        <tr>{{group.course}}</tr>
+        <tr>{{group.groupNo}}</tr>
+        <tr>
+          <a class="btn btn-outline-primary" routerLink="/group/{{group.id}}">
+              Подробнее
+          </a>
+        </tr>
+      </ng-container>
+    </tbody>
+  </table>
+</div>

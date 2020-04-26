@@ -1,16 +1,53 @@
 <form (ngSubmit)="onSubmit()">
   <div class="container-lg form-group">
-    <div class="row bg-light">
-      <div class="col bg-info text-white">
+    <div class="bg-primary text-center h3 text-white">
         {{pupilAttempt.attempt.task.name}}
-      </div>
-      <div class="row">
-        <label for="textArea" class="bg-secondary text-white text-center">Поле ввода</label>
-        <textarea class="form-control" id="textArea" (change)="updatePupilText($event.target.value)"></textarea>
-      </div>
     </div>
-    <div class="row">
-      <button class="btn btn-outline-primary">Завершить работу</button>
-    </div>
+    <span *ngIf="isTimeOut(); then timeOut else timeNotOut"></span>
+    <ng-template #timeOut>
+      <div class="container">
+        <div class="bg-danger text-center h3 text-center text-white">
+          Время на выполнение работы вышло
+        </div>
+        <div class="text-right">
+          <a class="btn btn-outline-primary"
+             routerLink="/pupils-attempts-view/{{this.pupilId}}/{{this.attemptId}}">
+            Посмотреть результаты работы
+          </a>
+        </div>
+        <br>
+      </div>
+    </ng-template>
+    <ng-template #timeNotOut>
+      <div class="container">
+        <span *ngIf="showTime; then time else showBtn"></span>
+        <ng-template #showBtn>
+          <div class="bg-success text-right h3 text-white">
+            <button class="btn btn-primary"
+                    (click)="showTimeLeft()">
+              Показать оставшееся время</button>
+          </div>
+        </ng-template>
+        <ng-template #time>
+          <div class="row bg-success h3 text-white">
+            <div class="col">Времени осталось</div>
+            <div class="col">
+              <div class="text-right">
+                {{timeLeft}} минут
+              </div>
+              
+            </div>
+          </div>
+        </ng-template>
+        <div class="text-center bg-primary h3 text-white">Поле ввода</div>
+      </div>
+      <div class="text-right">
+        <button class="btn btn-outline-primary">Завершить работу</button>
+      </div>
+      <br>
+    </ng-template>
+    <app-text-editor [initialText]="pupilAttempt.text"
+                     [disabled]="isTimeOut()"
+                     (outText)="setPupilText($event)"></app-text-editor>
   </div>
 </form>
